@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Controllers", "LamashareApi.Controllers\LamashareApi.Controllers.csproj", "{4DF08293-D276-436E-817A-B99A5CEEDA0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.BusinessLogic", "LamashareApi.BusinessLogic\LamashareApi.BusinessLogic.csproj", "{B9632F97-4838-4ABB-8BB2-6918AAD11021}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Shared", "LamashareApi.Shared\LamashareApi.Shared.csproj", "{3F777783-FB23-4261-A428-E1C4CF79CB3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Database", "LamashareApi.Database\LamashareApi.Database.csproj", "{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DF08293-D276-436E-817A-B99A5CEEDA0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DF08293-D276-436E-817A-B99A5CEEDA0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DF08293-D276-436E-817A-B99A5CEEDA0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DF08293-D276-436E-817A-B99A5CEEDA0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9632F97-4838-4ABB-8BB2-6918AAD11021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9632F97-4838-4ABB-8BB2-6918AAD11021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9632F97-4838-4ABB-8BB2-6918AAD11021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9632F97-4838-4ABB-8BB2-6918AAD11021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F777783-FB23-4261-A428-E1C4CF79CB3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F777783-FB23-4261-A428-E1C4CF79CB3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F777783-FB23-4261-A428-E1C4CF79CB3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F777783-FB23-4261-A428-E1C4CF79CB3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
