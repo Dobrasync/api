@@ -1,9 +1,9 @@
 using LamashareApi.Controllers.Base;
-using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LamashareApi.Controllers;
 
-[Route("files")]
+[Microsoft.AspNetCore.Components.Route("files")]
 public class FileController : BaseController
 {
 }
