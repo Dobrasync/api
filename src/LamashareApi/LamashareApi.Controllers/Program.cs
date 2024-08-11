@@ -1,7 +1,9 @@
 using System.Globalization;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
+using Asp.Versioning.Conventions;
 using Lamashare.BusinessLogic.Mapper;
+using Lamashare.BusinessLogic.Mapper.AutoMapper;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using Lamashare.BusinessLogic.Services.Main.Library;
 using Lamashare.BusinessLogic.Services.Main.Users;
@@ -73,13 +75,18 @@ builder.Services.Configure<RouteOptions>(opt => { opt.LowercaseUrls = true; });
 
 builder.Services.AddApiVersioning(opt =>
 {
-    opt.DefaultApiVersion = new ApiVersion(1, 0);
-    opt.AssumeDefaultVersionWhenUnspecified = false;
+    opt.DefaultApiVersion = new ApiVersion(1);
     opt.ReportApiVersions = true;
+    opt.AssumeDefaultVersionWhenUnspecified = true;
+    opt.ApiVersionReader = new UrlSegmentApiVersionReader();
+    opt.UnsupportedApiVersionStatusCode = 404;
+}).AddMvc(opt =>
+{
+    opt.Conventions.Add(new VersionByNamespaceConvention());
 }).AddApiExplorer(opt =>
 {
     opt.GroupNameFormat = "'v'VVV";
-    opt.SubstituteApiVersionInUrl = false;
+    opt.SubstituteApiVersionInUrl = true;
 });
 
 #endregion
