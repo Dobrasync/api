@@ -1,4 +1,5 @@
 using System.Net.Mime;
+using Gridify;
 using Lamashare.BusinessLogic.Dtos.Library;
 using Lamashare.BusinessLogic.Dtos.User;
 using Lamashare.BusinessLogic.Services.Main.Library;
@@ -8,7 +9,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace LamashareApi.Controllers;
 
-[Route("libraries")]
 public class LibraryController(ILibraryService ls) : BaseController
 {
     [HttpPost]
@@ -21,6 +21,18 @@ public class LibraryController(ILibraryService ls) : BaseController
     public async Task<IActionResult> CreateLibrary([FromBody] LibraryCreateDto cdto)
     {
         return Ok(await ls.CreateLibrary(cdto));
+    }
+    
+    [HttpGet("{userId}")]
+    [SwaggerOperation(
+        Summary = "Gets all libraries of user",
+        Description = "Gets all libraries of user",
+        OperationId = nameof(GetAllLibrariesOfUser)
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(Paging<LibraryDto>), MediaTypeNames.Application.Json)]
+    public async Task<IActionResult> GetAllLibrariesOfUser(Guid userId, [FromQuery] GridifyQuery searchQuery)
+    {
+        return Ok(await ls.GetAllLibrariesByUser(userId, searchQuery));
     }
     
     [HttpGet("{libraryId}")]

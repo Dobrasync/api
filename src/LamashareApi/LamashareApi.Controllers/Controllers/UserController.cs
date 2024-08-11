@@ -7,7 +7,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace LamashareApi.Controllers;
 
-[Route("users")]
 [SwaggerTag("Users")]
 public class UserController(IUsersService us) : BaseController
 {
