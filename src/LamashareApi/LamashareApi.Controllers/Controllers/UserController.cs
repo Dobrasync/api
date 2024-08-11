@@ -18,7 +18,7 @@ public class UserController(IUsersService us) : BaseController
         OperationId = nameof(GetUserById)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(UserDto), MediaTypeNames.Application.Json)]
-    private async Task<IActionResult> GetUserById(Guid userId)
+    public async Task<IActionResult> GetUserById(Guid userId)
     {
         return Ok(await us.GetUserById(userId));
     }

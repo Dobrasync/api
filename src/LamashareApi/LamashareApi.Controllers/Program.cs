@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Lamashare.BusinessLogic.Mapper;
 using LamashareApi.Middleware.ExceptionInteceptor;
@@ -62,14 +63,23 @@ builder.Services.Configure<RouteOptions>(opt => { opt.LowercaseUrls = true; });
 builder.Services.AddApiVersioning(opt =>
 {
     opt.DefaultApiVersion = new ApiVersion(1, 0);
-    opt.AssumeDefaultVersionWhenUnspecified = false;
+    opt.AssumeDefaultVersionWhenUnspecified = true;
     opt.ReportApiVersions = true;
+    opt.ApiVersionReader = new UrlSegmentApiVersionReader();
 }).AddApiExplorer(opt =>
 {
     opt.GroupNameFormat = "'v'VVV";
-    opt.SubstituteApiVersionInUrl = false;
+    opt.SubstituteApiVersionInUrl = true;
 });
 
+#endregion
+
+#region Controllers
+
+builder.Services.AddControllers();
+
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 #endregion
 
 #region Automapper
@@ -78,28 +88,45 @@ builder.Services.AddAutoMapper(cfg => { cfg.AddProfile<MappingProfile>(); });
 
 #endregion
 
-var app = builder.Build();
-
-#region Localization
-
-var localizeOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
-app.UseRequestLocalization(localizeOptions!.Value);
-
+#region Cors
+builder.Services.AddCors();
 #endregion
 
-#region Dev swagger UI
+var app = builder.Build();
 
+#region DevSwagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 #endregion
 
 #region HTTPS Redirect
 
 app.UseHttpsRedirection();
+
+#endregion
+
+#region Controllers
+app.MapControllers();
+#endregion
+
+#region Cors
+
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()
+        .WithOrigins(appsettings.Core.CorsOrigins);
+});
+#endregion
+
+#region Local
+
+var localizeOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(localizeOptions!.Value);
 
 #endregion
 
