@@ -112,7 +112,7 @@ builder.Services.AddSingleton<IAppsettingsProvider, AppsettingsProvider>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddDbContext<LamashareContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("MainDb"));
+    opt.UseMySQL(builder.Configuration.GetConnectionString("MainDb"));
 });
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
@@ -170,5 +170,12 @@ app.UseRequestLocalization(localizeOptions!.Value);
 app.UseMiddleware<ExceptionInterceptor>();
 
 #endregion
+
+using(var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<LamashareContext>();
+    // use context
+    dbContext.Database.EnsureCreated();
+}
 
 app.Run();

@@ -13,8 +13,11 @@ public class LamashareContext : DbContext
     public virtual DbSet<File> Files { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Library> Libraries { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<User>()
+            .HasIndex(e => e.Username)
+            .IsUnique();
     }
 }

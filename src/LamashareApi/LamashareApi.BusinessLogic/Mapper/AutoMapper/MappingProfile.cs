@@ -9,7 +9,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<User, UserDto>();
+        CreateMap<User, UserDto>()
+            .ForMember(dest => dest.LibraryIds, opt => opt.MapFrom(src => src.Libraries.Select(x => x.Id)));
+        CreateMap<UserCreateDto, User>();
         CreateMap<Library, LibraryDto>();
     }
 }

@@ -24,7 +24,7 @@ public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
 
     public IQueryable<TEntity> QueryAll()
     {
-        throw new NotImplementedException();
+        return _dbSet;
     }
 
     public async Task<TEntity> InsertAsync(TEntity entityToInsert)
