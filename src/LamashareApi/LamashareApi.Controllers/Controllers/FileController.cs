@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LamashareApi.Controllers;
 
-[Microsoft.AspNetCore.Components.Route("files")]
+[Route("files")]
 public class FileController : BaseController
 {
 }

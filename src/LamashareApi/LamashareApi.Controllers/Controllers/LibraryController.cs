@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace LamashareApi.Controllers;
 
+[Route("libraries")]
 public class LibraryController(ILibraryService ls) : BaseController
 {
     [HttpPost]
