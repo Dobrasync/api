@@ -12,6 +12,7 @@ using LamashareApi.Shared.Appsettings;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,11 @@ builder.Services.AddEndpointsApiExplorer();
 
 #region Swagger
 
-builder.Services.AddSwaggerGen(opt => { opt.EnableAnnotations(); });
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("v1", new OpenApiInfo() { Title = "Lamashare API", Version = "v1" });
+    opt.EnableAnnotations();
+});
 
 #endregion
 
@@ -69,13 +74,12 @@ builder.Services.Configure<RouteOptions>(opt => { opt.LowercaseUrls = true; });
 builder.Services.AddApiVersioning(opt =>
 {
     opt.DefaultApiVersion = new ApiVersion(1, 0);
-    opt.AssumeDefaultVersionWhenUnspecified = true;
+    opt.AssumeDefaultVersionWhenUnspecified = false;
     opt.ReportApiVersions = true;
-    opt.ApiVersionReader = new UrlSegmentApiVersionReader();
 }).AddApiExplorer(opt =>
 {
     opt.GroupNameFormat = "'v'VVV";
-    opt.SubstituteApiVersionInUrl = true;
+    opt.SubstituteApiVersionInUrl = false;
 });
 
 #endregion
@@ -119,7 +123,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(config =>
+    {
+        config.SwaggerEndpoint("/swagger/v1/swagger.json", "Lamashare API");
+    });
 }
 #endregion
 
