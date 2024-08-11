@@ -8,17 +8,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LamashareApi.Database\LamashareApi.Database.csproj" />
-      <ProjectReference Include="..\LamashareApi.Shared\LamashareApi.Shared.csproj" />
+        <ProjectReference Include="..\LamashareApi.Database\LamashareApi.Database.csproj"/>
+        <ProjectReference Include="..\LamashareApi.Shared\LamashareApi.Shared.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services\Main\" />
+        <PackageReference Include="AutoMapper" Version="13.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2"/>
     </ItemGroup>
 
 </Project>

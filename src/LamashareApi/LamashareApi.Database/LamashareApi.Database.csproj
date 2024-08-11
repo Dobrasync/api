@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LamashareApi.Shared\LamashareApi.Shared.csproj" />
+        <ProjectReference Include="..\LamashareApi.Shared\LamashareApi.Shared.csproj"/>
     </ItemGroup>
 
 </Project>

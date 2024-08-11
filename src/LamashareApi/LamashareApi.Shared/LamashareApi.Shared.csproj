@@ -7,27 +7,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Localization\SharedResources.de-DE.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>SharedResources.de-DE.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Localization\SharedResources.en-US.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>SharedResources.en-US.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Localization\SharedResources.de-DE.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>SharedResources.de-DE.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Localization\SharedResources.en-US.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>SharedResources.en-US.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Localization\SharedResources.de-DE.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>SharedResources.de-DE.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Localization\SharedResources.en-US.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>SharedResources.en-US.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Localization\SharedResources.de-DE.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>SharedResources.de-DE.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Localization\SharedResources.en-US.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>SharedResources.en-US.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

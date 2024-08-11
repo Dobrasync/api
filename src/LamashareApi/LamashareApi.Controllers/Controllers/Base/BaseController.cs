@@ -8,5 +8,4 @@ namespace LamashareApi.Controllers.Base;
 [ApiController]
 public class BaseController : ControllerBase
 {
-    
 }

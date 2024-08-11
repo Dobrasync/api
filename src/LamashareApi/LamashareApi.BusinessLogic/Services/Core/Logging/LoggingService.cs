@@ -1,6 +1,6 @@
 namespace Lamashare.BusinessLogic.Services.Core;
 
-public class LoggingService() : ILoggingService
+public class LoggingService : ILoggingService
 {
     public void LogDebug(string msg)
     {
