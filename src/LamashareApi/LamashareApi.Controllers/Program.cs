@@ -2,9 +2,15 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Lamashare.BusinessLogic.Mapper;
+using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
+using Lamashare.BusinessLogic.Services.Main.Library;
+using Lamashare.BusinessLogic.Services.Main.Users;
+using LamashareApi.Database.DB;
+using LamashareApi.Database.Repos;
 using LamashareApi.Middleware.ExceptionInteceptor;
 using LamashareApi.Shared.Appsettings;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -85,6 +91,21 @@ builder.Services.AddControllersWithViews()
 #region Automapper
 
 builder.Services.AddAutoMapper(cfg => { cfg.AddProfile<MappingProfile>(); });
+
+#endregion
+
+#region Services
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IAppsettingsProvider, AppsettingsProvider>();
+builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
+builder.Services.AddDbContext<LamashareContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("MainDb"));
+});
+
+builder.Services.AddScoped<ILibraryService, LibraryService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 
 #endregion
 
