@@ -4,6 +4,5 @@ namespace LamashareApi.Shared.Appsettings.Auth;
 
 public class AuthAS
 {
-    [Required]
-    public string JwtSecret { get; set; } = default!;
+    [Required] public string JwtSecret { get; set; } = default!;
 }

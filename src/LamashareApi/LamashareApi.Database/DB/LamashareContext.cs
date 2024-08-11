@@ -6,14 +6,15 @@ namespace LamashareApi.Database.DB;
 
 public class LamashareContext : DbContext
 {
-    public LamashareContext(DbContextOptions<LamashareContext> options) : base(options) {}
-
-    protected override void OnModelCreating(ModelBuilder builder)
+    public LamashareContext(DbContextOptions<LamashareContext> options) : base(options)
     {
-        
     }
-    
+
     public virtual DbSet<File> Files { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Library> Libraries { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+    }
 }

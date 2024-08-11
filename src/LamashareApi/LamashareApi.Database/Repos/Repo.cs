@@ -6,21 +6,17 @@ namespace LamashareApi.Database.Repos;
 
 public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
 {
-    #region fields
-    private readonly LamashareContext _context;
-    private readonly DbSet<TEntity> _dbSet;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    #endregion
-    
     #region ctor
+
     public Repo(LamashareContext context, IHttpContextAccessor hca)
     {
         _context = context;
         _httpContextAccessor = hca;
         _dbSet = context.Set<TEntity>();
     }
+
     #endregion
-    
+
     public Task<TEntity?> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
@@ -78,4 +74,12 @@ public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
 
         return entitiesToDelete;
     }
+
+    #region fields
+
+    private readonly LamashareContext _context;
+    private readonly DbSet<TEntity> _dbSet;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    #endregion
 }
