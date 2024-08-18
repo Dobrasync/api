@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 using Lamashare.BusinessLogic.Dtos.Auth;
 using Lamashare.BusinessLogic.Dtos.User;
 using Lamashare.BusinessLogic.Services.Core.Jwt;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lamashare.BusinessLogic.Services.Main.Auth;
 
-public class AuthService(IJwtService jwtService, IInvokerService invokerService, IRepoWrapper repoWrap, AutoMapper.Mapper mapper) : IAuthService
+public class AuthService(IJwtService jwtService, IInvokerService invokerService, IRepoWrapper repoWrap, IMapper mapper) : IAuthService
 {
     public AuthDto MakeAuthDto(AuthJwtClaims claims)
     {
