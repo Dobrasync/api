@@ -26,7 +26,7 @@ public class AuthService(IJwtService jwtService, IInvokerService invokerService,
 
     public async Task<AuthDto> CreateTokenClassic(ClassicLoginDto dto)
     {
-        User invoker = await invokerService.GetInvokerAsyncThrows();
+        User invoker = await GetUserMatchingCredentialsThrows(dto);
 
         AuthJwtClaims claims = AuthJwtClaims.FromUser(invoker);
         AuthDto authTokenDto = MakeAuthDto(claims);
