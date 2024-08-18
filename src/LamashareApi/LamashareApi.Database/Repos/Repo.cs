@@ -17,9 +17,9 @@ public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
 
     #endregion
 
-    public Task<TEntity?> GetByIdAsync(Guid id)
+    public async Task<TEntity?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _dbSet.FindAsync(id);
     }
 
     public IQueryable<TEntity> QueryAll()

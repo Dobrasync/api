@@ -10,6 +10,7 @@ public class LamashareContext : DbContext
     {
     }
 
+    public virtual DbSet<SystemSetting> SystemSettings { get; set; }
     public virtual DbSet<File> Files { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Library> Libraries { get; set; }

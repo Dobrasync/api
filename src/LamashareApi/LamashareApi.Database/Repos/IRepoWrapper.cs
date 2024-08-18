@@ -7,6 +7,7 @@ namespace LamashareApi.Database.Repos;
 public interface IRepoWrapper
 {
     LamashareContext DbContext { get; }
+    IRepo<SystemSetting> SystemSettingRepo { get; }
     IRepo<User> UserRepo { get; }
     IRepo<Library> LibraryRepo { get; }
     IRepo<File> FileRepo { get; }

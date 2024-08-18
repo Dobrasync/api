@@ -7,6 +7,7 @@ namespace LamashareApi.Database.Repos;
 
 public class RepoWrapper(LamashareContext context, IHttpContextAccessor hca) : IRepoWrapper
 {
+    private IRepo<SystemSetting> _systemSettingRepo = null!;
     private IRepo<File> _fileRepo = null!;
     private IRepo<Library> _libraryRepo = null!;
     private IRepo<User> _userRepo = null!;
@@ -14,6 +15,10 @@ public class RepoWrapper(LamashareContext context, IHttpContextAccessor hca) : I
     public LamashareContext DbContext => context;
 
     #region Repos
+    public IRepo<SystemSetting> SystemSettingRepo
+    {
+        get { return _systemSettingRepo ??= new Repo<SystemSetting>(context, hca); }
+    }
 
     public IRepo<User> UserRepo
     {

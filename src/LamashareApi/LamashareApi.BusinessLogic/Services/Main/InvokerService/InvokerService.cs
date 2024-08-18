@@ -39,8 +39,10 @@ public class InvokerService(IHttpContextAccessor httpContextAccessor, IJwtServic
         string? authJwt = httpContextAccessor?.HttpContext?.Request?.Headers[EtcConstants.AuthHeaderName];
         if (string.IsNullOrEmpty(authJwt))
             throw new InvalidAuthTokenUSException();
+
+        string withoutBearerPrefix = authJwt.Replace("Bearer ", "");
         
-        AuthJwtClaims decodeAuthClaims = jwtService.DecodeAuthJwt(authJwt);
+        AuthJwtClaims decodeAuthClaims = jwtService.DecodeAuthJwt(withoutBearerPrefix);
         return decodeAuthClaims;
     }
 }
