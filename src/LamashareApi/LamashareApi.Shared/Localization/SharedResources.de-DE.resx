@@ -26,4 +26,7 @@
     <data name="debug.test" xml:space="preserve">
         <value>Ein deutscher Debug-String.</value>
     </data>
+    <data name="exception.usernameTaken" xml:space="preserve">
+        <value />
+    </data>
 </root>

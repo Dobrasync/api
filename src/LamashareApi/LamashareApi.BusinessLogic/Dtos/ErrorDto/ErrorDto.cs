@@ -1,4 +1,4 @@
-using LamashareApi.Shared.Exceptions.ApiExceptions;
+using LamashareApi.Shared.Exceptions.UserspaceException;
 
 namespace Lamashare.BusinessLogic.Dtos.ErrorDto;
 
