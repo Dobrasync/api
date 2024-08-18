@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Exceptions.ApiExceptions;
+namespace LamashareApi.Shared.Exceptions.UserspaceException;
 
 public class UserspaceException : Exception
 {

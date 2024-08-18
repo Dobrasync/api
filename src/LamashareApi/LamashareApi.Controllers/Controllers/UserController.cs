@@ -1,5 +1,7 @@
 using System.Net.Mime;
+using Lamashare.BusinessLogic.Dtos.Auth;
 using Lamashare.BusinessLogic.Dtos.User;
+using Lamashare.BusinessLogic.Services.Main.UserRegistration;
 using Lamashare.BusinessLogic.Services.Main.Users;
 using LamashareApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +22,18 @@ public class UserController(IUsersService us) : BaseController
     public async Task<IActionResult> CreateUser([FromBody] UserCreateDto ucdto)
     {
         return Ok(await us.CreateUser(ucdto));
+    }
+    
+    [HttpPost("register")]
+    [SwaggerOperation(
+        Summary = "Register as new user",
+        Description = "Register and create a new account",
+        OperationId = nameof(RegisterUser)
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(AuthDto), MediaTypeNames.Application.Json)]
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto rdto)
+    {
+        return Ok(await us.RegisterUser(rdto));
     }
     
     [HttpGet("username-available/{username}")]

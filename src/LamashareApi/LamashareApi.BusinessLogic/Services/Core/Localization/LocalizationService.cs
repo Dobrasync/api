@@ -9,4 +9,16 @@ public class LocalizationService(IStringLocalizer<SharedResources> localizer) : 
     {
         return localizer[localizationKey] ?? $"LOCKEY#{localizationKey}";
     }
+    
+    public string GetLocKey(string localizationKey, Dictionary<string, string> interpolation)
+    {
+        string sourceStr = GetLocKey(localizationKey);
+
+        foreach (var key in interpolation.Keys)
+        {
+            sourceStr = sourceStr.Replace(key, interpolation.GetValueOrDefault(key));
+        }
+        
+        return sourceStr;
+    }
 }

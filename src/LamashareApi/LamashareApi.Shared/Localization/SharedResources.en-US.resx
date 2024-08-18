@@ -26,4 +26,7 @@
     <data name="debug.test" xml:space="preserve">
         <value>An english debug-string.</value>
     </data>
+    <data name="exception.usernameTaken" xml:space="preserve">
+        <value>Username {{username}} already in user.</value>
+    </data>
 </root>

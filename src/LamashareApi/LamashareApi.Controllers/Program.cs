@@ -5,6 +5,9 @@ using Asp.Versioning.Conventions;
 using Lamashare.BusinessLogic.Mapper;
 using Lamashare.BusinessLogic.Mapper.AutoMapper;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
+using Lamashare.BusinessLogic.Services.Core.Jwt;
+using Lamashare.BusinessLogic.Services.Core.Localization;
+using Lamashare.BusinessLogic.Services.Main.InvokerService;
 using Lamashare.BusinessLogic.Services.Main.Library;
 using Lamashare.BusinessLogic.Services.Main.Users;
 using LamashareApi.Database.DB;
@@ -109,6 +112,7 @@ builder.Services.AddAutoMapper(cfg => { cfg.AddProfile<MappingProfile>(); });
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IAppsettingsProvider, AppsettingsProvider>();
+builder.Services.AddScoped<ILocalizationService, LocalizationService>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddDbContext<LamashareContext>(opt =>
 {
@@ -117,6 +121,8 @@ builder.Services.AddDbContext<LamashareContext>(opt =>
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IInvokerService, InvokerService>();
 
 #endregion
 

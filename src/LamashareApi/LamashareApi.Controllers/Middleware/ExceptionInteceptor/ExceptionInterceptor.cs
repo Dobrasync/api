@@ -1,5 +1,5 @@
 using Lamashare.BusinessLogic.Dtos.ErrorDto;
-using LamashareApi.Shared.Exceptions.ApiExceptions;
+using LamashareApi.Shared.Exceptions.UserspaceException;
 
 namespace LamashareApi.Middleware.ExceptionInteceptor;
 

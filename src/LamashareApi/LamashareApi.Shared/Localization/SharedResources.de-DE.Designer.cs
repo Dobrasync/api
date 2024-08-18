@@ -50,5 +50,11 @@ namespace LamashareApi.Shared.Localization {
                 return ResourceManager.GetString("debug.test", resourceCulture);
             }
         }
+        
+        internal static string exception_usernameTaken {
+            get {
+                return ResourceManager.GetString("exception.usernameTaken", resourceCulture);
+            }
+        }
     }
 }
