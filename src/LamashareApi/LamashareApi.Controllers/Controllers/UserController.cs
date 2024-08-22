@@ -1,5 +1,7 @@
 using System.Net.Mime;
+using Gridify;
 using Lamashare.BusinessLogic.Dtos.Auth;
+using Lamashare.BusinessLogic.Dtos.Library;
 using Lamashare.BusinessLogic.Dtos.User;
 using Lamashare.BusinessLogic.Services.Main.UserRegistration;
 using Lamashare.BusinessLogic.Services.Main.Users;
@@ -57,6 +59,30 @@ public class UserController(IUsersService us) : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(UserDto), MediaTypeNames.Application.Json)]
     public async Task<IActionResult> GetUserById(Guid userId)
     {
-        return Ok(await us.GetUserById(userId));
+        return Ok(await us.GetUserByIdAsyncThrows(userId));
+    }
+    
+    [HttpGet("{userId}/libraries")]
+    [SwaggerOperation(
+        Summary = "Gets all libraries of user",
+        Description = "Gets all libraries of user",
+        OperationId = nameof(GetAllLibrariesOfUser)
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(Paging<LibraryDto>), MediaTypeNames.Application.Json)]
+    public async Task<IActionResult> GetAllLibrariesOfUser(Guid userId, [FromQuery] GridifyQuery searchQuery)
+    {
+        return Ok(await us.GetAllLibrariesByUser(userId, searchQuery));
+    }
+    
+    [HttpPost("{userId}/library")]
+    [SwaggerOperation(
+        Summary = "Create new library for user",
+        Description = "Creates a new library for the user",
+        OperationId = nameof(CreateUserLibrary)
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(Paging<LibraryDto>), MediaTypeNames.Application.Json)]
+    public async Task<IActionResult> CreateUserLibrary(Guid userId, LibraryCreateDto libraryCreateDto)
+    {
+        return Ok(await us.CreateUserLibrary(userId, libraryCreateDto));
     }
 }
