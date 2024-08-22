@@ -29,4 +29,7 @@
     <data name="exception.usernameTaken" xml:space="preserve">
         <value>Username {{username}} already in user.</value>
     </data>
+    <data name="exception.notFound" xml:space="preserve">
+        <value>Resource does not exist.</value>
+    </data>
 </root>

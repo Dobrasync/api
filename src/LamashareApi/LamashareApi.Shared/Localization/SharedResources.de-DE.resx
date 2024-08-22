@@ -29,4 +29,7 @@
     <data name="exception.usernameTaken" xml:space="preserve">
         <value />
     </data>
+    <data name="exception.notFound" xml:space="preserve">
+        <value />
+    </data>
 </root>

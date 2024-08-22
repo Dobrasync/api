@@ -10,6 +10,8 @@ using Lamashare.BusinessLogic.Services.Core.Localization;
 using Lamashare.BusinessLogic.Services.Main.Auth;
 using Lamashare.BusinessLogic.Services.Main.InvokerService;
 using Lamashare.BusinessLogic.Services.Main.Library;
+using Lamashare.BusinessLogic.Services.Main.System;
+using Lamashare.BusinessLogic.Services.Main.SystemSettings;
 using Lamashare.BusinessLogic.Services.Main.Users;
 using LamashareApi.Database.DB;
 using LamashareApi.Database.Repos;
@@ -125,6 +127,7 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IInvokerService, InvokerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISystemSettingsService, SystemSettingsService>();
 
 #endregion
 

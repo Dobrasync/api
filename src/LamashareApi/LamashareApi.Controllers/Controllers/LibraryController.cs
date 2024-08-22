@@ -23,18 +23,6 @@ public class LibraryController(ILibraryService ls) : BaseController
         return Ok(await ls.CreateLibrary(cdto));
     }
     
-    [HttpGet("{userId}")]
-    [SwaggerOperation(
-        Summary = "Gets all libraries of user",
-        Description = "Gets all libraries of user",
-        OperationId = nameof(GetAllLibrariesOfUser)
-    )]
-    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(Paging<LibraryDto>), MediaTypeNames.Application.Json)]
-    public async Task<IActionResult> GetAllLibrariesOfUser(Guid userId, [FromQuery] GridifyQuery searchQuery)
-    {
-        return Ok(await ls.GetAllLibrariesByUser(userId, searchQuery));
-    }
-    
     [HttpGet("{libraryId}")]
     [SwaggerOperation(
         Summary = "Get a library with given id",
@@ -54,9 +42,9 @@ public class LibraryController(ILibraryService ls) : BaseController
         OperationId = nameof(UpdateLibraryById)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(LibraryDto), MediaTypeNames.Application.Json)]
-    public async Task<IActionResult> UpdateLibraryById(LibraryUpdateDto udto)
+    public async Task<IActionResult> UpdateLibraryById(Guid libraryId, [FromBody] LibraryUpdateDto udto)
     {
-        return Ok(await ls.UpdateLibrary(udto));
+        return Ok(await ls.UpdateLibrary(libraryId, udto));
     }
     
     [HttpDelete("{libraryId}")]
