@@ -93,7 +93,7 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
     #region Util
     private async Task<User> FindUserByIdAsyncThrows(Guid id)
     {
-        User? found = await repoWrap.UserRepo.GetByIdAsync(id);
+        User? found = await repoWrap.UserRepo.QueryAll().Include(x => x.Libraries).FirstOrDefaultAsync(x => x.Id == id);
         if (found == null) throw new NotFoundUSException("User not found");
 
         return found;
@@ -106,7 +106,7 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
     {
         Paging<LamashareApi.Database.DB.Entities.Library> filteredLibraries = await
             GetGridifyFilteredLibrariesAsync(queryable, searchQuery);
-        List<LibraryDto> dtos = mapper.Map<List<LibraryDto>>(filteredLibraries);
+        List<LibraryDto> dtos = mapper.Map<List<LibraryDto>>(filteredLibraries.Data);
 
         return new Paging<LibraryDto> { Data = dtos, Count = dtos.Count };
     }
