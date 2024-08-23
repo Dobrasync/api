@@ -80,7 +80,7 @@ public class UserController(IUsersService us) : BaseController
         Description = "Creates a new library for the user",
         OperationId = nameof(CreateUserLibrary)
     )]
-    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(Paging<LibraryDto>), MediaTypeNames.Application.Json)]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(LibraryDto), MediaTypeNames.Application.Json)]
     public async Task<IActionResult> CreateUserLibrary(Guid userId, LibraryCreateDto libraryCreateDto)
     {
         return Ok(await us.CreateUserLibrary(userId, libraryCreateDto));

@@ -13,5 +13,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.LibraryIds, opt => opt.MapFrom(src => src.Libraries.Select(x => x.Id)));
         CreateMap<UserCreateDto, User>();
         CreateMap<Library, LibraryDto>();
+        CreateMap<LibraryCreateDto, Library>();
     }
 }
