@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\lamashare-core\src\LamashareCore\LamashareCore\LamashareCore.csproj" />
         <ProjectReference Include="..\LamashareApi.Database\LamashareApi.Database.csproj"/>
         <ProjectReference Include="..\LamashareApi.Shared\LamashareApi.Shared.csproj"/>
     </ItemGroup>
