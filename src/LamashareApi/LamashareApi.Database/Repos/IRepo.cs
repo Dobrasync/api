@@ -3,6 +3,7 @@ namespace LamashareApi.Database.Repos;
 public interface IRepo<TEntity>
 {
     Task<TEntity?> GetByIdAsync(Guid id);
+    Task<TEntity> GetByIdAsyncThrows(Guid id);
     IQueryable<TEntity> QueryAll();
     Task<TEntity> InsertAsync(TEntity entityToInsert);
     Task<List<TEntity>> InsertRangeAsync(List<TEntity> entitiesToInsert);

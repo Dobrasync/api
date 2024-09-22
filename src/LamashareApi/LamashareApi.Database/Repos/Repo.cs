@@ -1,4 +1,5 @@
 using LamashareApi.Database.DB;
+using LamashareApi.Shared.Exceptions.UserspaceException;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,16 @@ public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
     public async Task<TEntity?> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);
+    }
+    
+    public async Task<TEntity> GetByIdAsyncThrows(Guid id)
+    {
+        var t = await GetByIdAsync(id);
+        if (t == null)
+        {
+            throw new NotFoundUSException();
+        }
+        return t;
     }
 
     public IQueryable<TEntity> QueryAll()

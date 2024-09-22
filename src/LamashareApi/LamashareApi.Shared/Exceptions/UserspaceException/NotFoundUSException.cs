@@ -1,8 +1,6 @@
+using LamashareApi.Shared.Localization;
+
 namespace LamashareApi.Shared.Exceptions.UserspaceException;
 
-public class NotFoundUSException : UserspaceException
-{
-    public NotFoundUSException(string message) : base(404, message, "The requested resource does not exist.")
-    {
-    }
-}
+public class NotFoundUSException() : UserspaceException(404, LocKeys.ExceptionNotFound.KeyTemplate,
+    "The requested resource does not exist.");

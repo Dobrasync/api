@@ -1,0 +1,32 @@
+using Lamashare.BusinessLogic.Dtos.File;
+using Lamashare.BusinessLogic.Dtos.Generic;
+
+namespace Lamashare.BusinessLogic.Services.Main.File;
+
+public interface IFileService
+{
+    #region GET - File total checksum
+    public Task<FileChecksumDto> GetTotalChecksum(Guid libraryId, string libraryFilePath);
+    #endregion
+    #region GET - File info
+    public Task<FileInfoDto> GetFileInfo(Guid libraryId, string libraryFilePath);
+    #endregion
+    #region GET - File status
+    public Task<FileStatusDto> GetFileStatus(Guid libraryId, string libraryFilePath);
+    #endregion
+    #region GET - Get block list
+    public Task<string[]> GetFileBlockList(Guid libraryId, string libraryFilePath);
+    #endregion
+    #region GET - Get block
+    public Task<BlockDto> PullBlock(string blockChecksum);
+    #endregion
+    #region POST - Create file sync transaction
+    public Task<FileTransactionDto> CreateFileTransaction(FileTransactionCreateDto createDto);
+    #endregion
+    #region POST - Finish file sync transaction
+    public Task<FileTransactionFinishDto> FinishFileTransaction(Guid transactionId);
+    #endregion
+    #region POST - Push a block
+    public Task<StatusDto> PushBlock(BlockDto blockDto);
+    #endregion
+}

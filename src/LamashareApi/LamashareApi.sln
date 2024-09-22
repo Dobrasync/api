@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Shared", "Lama
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Database", "LamashareApi.Database\LamashareApi.Database.csproj", "{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareCore", "..\..\..\lamashare-core\src\LamashareCore\LamashareCore\LamashareCore.csproj", "{9520A0D7-D03C-419F-9FBD-4F97F09881F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
