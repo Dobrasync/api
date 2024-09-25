@@ -32,7 +32,7 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
     public async Task<AuthDto> RegisterUser(RegisterUserDto rdto)
     {
         if (!await IsUsernameAvailable(rdto.Username))
-            throw new UsernameTakenUSException(locs.GetLocKey(LocKeys.ExceptionUsernameTaken()));
+            throw new UsernameTakenUSException();
         
         User newUser = new()
         {
@@ -94,7 +94,7 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
     private async Task<User> FindUserByIdAsyncThrows(Guid id)
     {
         User? found = await repoWrap.UserRepo.QueryAll().Include(x => x.Libraries).FirstOrDefaultAsync(x => x.Id == id);
-        if (found == null) throw new NotFoundUSException("User not found");
+        if (found == null) throw new NotFoundUSException();
 
         return found;
     }
