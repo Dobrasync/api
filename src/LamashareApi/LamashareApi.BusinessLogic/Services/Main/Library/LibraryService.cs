@@ -59,7 +59,7 @@ public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalization
         LamashareApi.Database.DB.Entities.Library? lib = await repoWrap.LibraryRepo.QueryAll().FirstOrDefaultAsync(x => x.Id == id);
 
         if (lib == null)
-            throw new NotFoundUSException(localizationService.GetLocKey(LocKeys.ExceptionEntityNotFound()));
+            throw new NotFoundUSException();
 
         return lib;
     }

@@ -6,7 +6,7 @@ public static class LocKeys
     {
         Key ="exception.usernameTaken"
     };
-    public static readonly LocKey ExceptionNotFound = new()
+    public static readonly LocKey ExceptionResourceNotFound = new()
     {
         Key ="exception.notFound"
     };
