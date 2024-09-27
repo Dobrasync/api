@@ -4,6 +4,7 @@ using LamashareApi.Database.Repos;
 using LamashareApi.Shared.Constants;
 using LamashareApi.Shared.Exceptions.UserspaceException;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lamashare.BusinessLogic.Services.Main.InvokerService;
 
@@ -24,10 +25,11 @@ public class InvokerService(IHttpContextAccessor httpContextAccessor, IJwtServic
 
     public async Task<User> GetInvokerAsyncThrows()
     {
-        AuthJwtClaims claims = GetInvokerAuthJwtClaimsThrows();
+        //AuthJwtClaims claims = GetInvokerAuthJwtClaimsThrows();
 
-        User? user = await repoWrap.UserRepo.GetByIdAsync(claims.UserId);
-
+        //User? user = await repoWrap.UserRepo.GetByIdAsync(claims.UserId);
+        User? user = await repoWrap.UserRepo.QueryAll().FirstOrDefaultAsync();
+        
         if (user == null)
             throw new InvalidAuthTokenUSException();
 

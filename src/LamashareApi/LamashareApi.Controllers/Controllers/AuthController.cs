@@ -11,18 +11,6 @@ namespace LamashareApi.Controllers;
 [SwaggerTag("Auth")]
 public class AuthController(IAuthService authService) : BaseController
 {
-    [HttpPost("create-auth-token/classic")]
-    [SwaggerOperation(
-        Summary = "Generate new auth token the classic way",
-        Description = "Generates a new auth token for user matching the provided classic credentials.",
-        OperationId = nameof(CreateTokenClassic)
-    )]
-    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(AuthDto), MediaTypeNames.Application.Json)]
-    public async Task<IActionResult> CreateTokenClassic([FromBody] ClassicLoginDto dto)
-    {
-        return Ok(await authService.CreateTokenClassic(dto));
-    }
-    
     [HttpGet("current-session")]
     [SwaggerOperation(
         Summary = "Returns info about current session",

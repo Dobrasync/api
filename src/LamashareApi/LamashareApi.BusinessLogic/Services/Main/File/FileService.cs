@@ -1,18 +1,19 @@
 using Lamashare.BusinessLogic.Dtos.File;
 using Lamashare.BusinessLogic.Dtos.Generic;
+using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using LamashareApi.Database.Repos;
 using LamashareCore.Util;
 
 namespace Lamashare.BusinessLogic.Services.Main.File;
 
-public class FileService(IRepoWrapper repoWrap) : IFileService
+public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFileService
 {
     public async Task<FileChecksumDto> GetTotalChecksum(Guid libraryId, string libraryFilePath)
     {
         #region Load library
         LamashareApi.Database.DB.Entities.Library lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
         #endregion
-        string sysPath = FileUtil.FileLibPathToSysPath(lib.Path, libraryFilePath);
+        string sysPath = FileUtil.FileLibPathToSysPath(apps.GetAppsettings().Storage.LibraryLocation, libraryFilePath);
         string check = await FileUtil.GetFileTotalChecksumAsync(sysPath);
         return new FileChecksumDto()
         {
