@@ -10,6 +10,20 @@ namespace LamashareApi.Controllers;
 
 public class FileController : BaseController
 {
+    #region POST - Create diff list
+    [HttpGet("diff")]
+    [SwaggerOperation(
+        Summary = "Get library diff",
+        Description = "Generates a diff manifest.",
+        OperationId = nameof(GetDiff)
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(LibraryDiffDto))]
+    public async Task<IActionResult> GetDiff([FromBody] CreateDiffDto dto)
+    {
+        return Ok();
+    }
+    #endregion
+    
     #region GET - File total checksum
     [HttpGet("total-checksum")]
     [SwaggerOperation(
