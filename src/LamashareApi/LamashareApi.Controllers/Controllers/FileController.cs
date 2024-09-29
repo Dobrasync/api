@@ -2,28 +2,15 @@ using System.Net.Mime;
 using Lamashare.BusinessLogic.Dtos.File;
 using Lamashare.BusinessLogic.Dtos.Generic;
 using Lamashare.BusinessLogic.Dtos.Library;
+using Lamashare.BusinessLogic.Services.Main.File;
 using LamashareApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace LamashareApi.Controllers;
 
-public class FileController : BaseController
+public class FileController(IFileService fileService) : BaseController
 {
-    #region POST - Create diff list
-    [HttpGet("diff")]
-    [SwaggerOperation(
-        Summary = "Get library diff",
-        Description = "Generates a diff manifest.",
-        OperationId = nameof(GetDiff)
-    )]
-    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(LibraryDiffDto))]
-    public async Task<IActionResult> GetDiff([FromBody] CreateDiffDto dto)
-    {
-        return Ok();
-    }
-    #endregion
-    
     #region GET - File total checksum
     [HttpGet("total-checksum")]
     [SwaggerOperation(
@@ -34,7 +21,7 @@ public class FileController : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileChecksumDto))]
     public async Task<IActionResult> GetTotalChecksum([FromQuery] Guid libraryId, string libraryFilePath)
     {
-        return Ok();
+        return Ok(await fileService.GetTotalChecksum(libraryId, libraryFilePath));
     }
     #endregion
     #region GET - File info
@@ -47,7 +34,7 @@ public class FileController : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileInfoDto))]
     public async Task<IActionResult> GetFileInfo([FromQuery] Guid libraryId, string libraryFilePath)
     {
-        return Ok();
+        return Ok(await fileService.GetFileInfo(libraryId, libraryFilePath));
     }
     #endregion
     #region GET - File status
@@ -60,7 +47,7 @@ public class FileController : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileStatusDto))]
     public async Task<IActionResult> GetFileStatus([FromQuery] Guid libraryId, string libraryFilePath)
     {
-        return Ok();
+        return Ok(await fileService.GetFileStatus(libraryId, libraryFilePath));
     }
     #endregion
     #region GET - Get block list
@@ -73,7 +60,7 @@ public class FileController : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(string[]))]
     public async Task<IActionResult> GetFileBlockList([FromQuery] Guid libraryId, string libraryFilePath)
     {
-        return Ok();
+        return Ok(await fileService.GetFileBlockList(libraryId, libraryFilePath));
     }
     #endregion
     #region GET - Get block
@@ -86,7 +73,7 @@ public class FileController : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(BlockDto))]
     public async Task<IActionResult> PullBlock([FromQuery] string blockChecksum)
     {
-        return Ok();
+        return Ok(await fileService.PullBlock(blockChecksum));
     }
     #endregion
     #region POST - Create file sync transaction
@@ -99,7 +86,7 @@ public class FileController : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileTransactionDto))]
     public async Task<IActionResult> CreateFileTransaction([FromBody] FileTransactionCreateDto createDto)
     {
-        return Ok();
+        return Ok(await fileService.CreateFileTransaction(createDto));
     }
     #endregion
     #region POST - Finish file sync transaction
@@ -112,7 +99,7 @@ public class FileController : BaseController
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileTransactionFinishDto))]
     public async Task<IActionResult> FinishFileTransaction([FromQuery] Guid transactionId)
     {
-        return Ok();
+        return Ok(await fileService.FinishFileTransaction(transactionId));
     }
     #endregion
     #region POST - Push a block
@@ -123,9 +110,22 @@ public class FileController : BaseController
         OperationId = nameof(PushBlock)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(StatusDto))]
-    public async Task<IActionResult> PushBlock([FromBody] BlockDto blockDto)
+    public async Task<IActionResult> PushBlock([FromBody] BlockPushDto blockDto)
     {
-        return Ok();
+        return Ok(await fileService.PushBlock(blockDto));
+    }
+    #endregion
+    #region POST - Create diff list
+    [HttpGet("diff")]
+    [SwaggerOperation(
+        Summary = "Get library diff",
+        Description = "Generates a diff manifest.",
+        OperationId = nameof(GetDiff)
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(LibraryDiffDto))]
+    public async Task<IActionResult> GetDiff([FromBody] CreateDiffDto dto)
+    {
+        return Ok(await fileService.CreateLibraryDiff(dto));
     }
     #endregion
 }

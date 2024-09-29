@@ -11,6 +11,8 @@ public class LamashareContext : DbContext
     }
 
     public virtual DbSet<SystemSetting> SystemSettings { get; set; }
+    public virtual DbSet<FileTransaction> FileTransactions { get; set; }
+    public virtual DbSet<Block> Blocks { get; set; }
     public virtual DbSet<File> Files { get; set; }
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Library> Libraries { get; set; }
