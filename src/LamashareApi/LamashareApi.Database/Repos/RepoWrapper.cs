@@ -11,6 +11,8 @@ public class RepoWrapper(LamashareContext context, IHttpContextAccessor hca) : I
     private IRepo<File> _fileRepo = null!;
     private IRepo<Library> _libraryRepo = null!;
     private IRepo<User> _userRepo = null!;
+    private IRepo<Block> _blockRepo = null!;
+    private IRepo<FileTransaction> _fileTransactionRepo = null!;
 
     public LamashareContext DbContext => context;
 
@@ -33,6 +35,16 @@ public class RepoWrapper(LamashareContext context, IHttpContextAccessor hca) : I
     public IRepo<Library> LibraryRepo
     {
         get { return _libraryRepo ??= new Repo<Library>(context, hca); }
+    }
+    
+    public IRepo<Block> BlockRepo
+    {
+        get { return _blockRepo ??= new Repo<Block>(context, hca); }
+    }
+    
+    public IRepo<FileTransaction> FileTransactionRepo
+    {
+        get { return _fileTransactionRepo ??= new Repo<FileTransaction>(context, hca); }
     }
 
     #endregion

@@ -10,4 +10,10 @@ public class StorageAS
     /// </summary>
     [Required]
     public string LibraryLocation { get; set; } = default!;
+
+    /// <summary>
+    /// Where blocks are temporarily stored
+    /// </summary>
+    [Required]
+    public string TempBlockLocation { get; set; } = default!;
 }

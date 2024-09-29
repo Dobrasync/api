@@ -27,6 +27,9 @@ public interface IFileService
     public Task<FileTransactionFinishDto> FinishFileTransaction(Guid transactionId);
     #endregion
     #region POST - Push a block
-    public Task<StatusDto> PushBlock(BlockDto blockDto);
+    public Task<StatusDto> PushBlock(BlockPushDto blockDto);
+    #endregion
+    #region POST - Create diff
+    public Task<LibraryDiffDto> CreateLibraryDiff(CreateDiffDto dto);
     #endregion
 }
