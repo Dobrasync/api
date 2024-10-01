@@ -11,7 +11,7 @@ public class FileTransaction : BaseEntity
     public File File { get; set; } = default!;
     public EFileTransactionStatus Status { get; set; }
     public EFileTransactionType Type { get; set; }
-
+    public string ExpectedChecksum { get; set; } = default!;
     public List<string> ExpectedBlocks { get; set; } = new();
     public List<string> ReceivedBlocks { get; set; } = new();
 }
