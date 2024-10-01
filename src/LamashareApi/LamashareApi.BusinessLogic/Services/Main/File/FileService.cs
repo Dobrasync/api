@@ -4,6 +4,7 @@ using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using LamashareApi.Database.DB.Entities;
 using LamashareApi.Database.Enums;
 using LamashareApi.Database.Repos;
+using LamashareApi.Shared.Constants;
 using LamashareApi.Shared.Exceptions.UserspaceException;
 using LamashareCore.Util;
 using Microsoft.EntityFrameworkCore;
@@ -19,8 +20,10 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         LamashareApi.Database.DB.Entities.Library lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
         #endregion
         #region Generate checksum
-        string sysPath = FileUtil.FileLibPathToSysPath(apps.GetAppsettings().Storage.LibraryLocation, libraryFilePath);
-        string check = await FileUtil.GetFileTotalChecksumAsync(sysPath);
+
+        string libSysPath = LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation);
+        string fileSysPath = FileUtil.FileLibPathToSysPath(libSysPath, libraryFilePath);
+        string check = await FileUtil.GetFileTotalChecksumAsync(fileSysPath);
         #endregion
         
         return new FileChecksumDto()
@@ -121,11 +124,13 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             existingFile = await repoWrap.FileRepo.InsertAsync(new()
             {
                 FileLibraryPath = createDto.FileLibraryPath,
+                Library = lib,
+                TotalChecksum = createDto.TotalChecksum,
+                ModifiedOn = createDto.ModifiedOn,
             });
         }
         #endregion
         #region check if already locked
-
         var ongoingTransaction = existingFile.FileTransactions.FirstOrDefault(x => x.Status == EFileTransactionStatus.INCOMPLETE);
         if (ongoingTransaction != null)
         {
@@ -141,7 +146,9 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             Status = EFileTransactionStatus.INCOMPLETE,
             CreatedOn = DateTime.UtcNow,
             LastUpdatedOn = DateTime.UtcNow,
-            Type = createDto.Type
+            Type = createDto.Type,
+            ExpectedChecksum = createDto.TotalChecksum,
+            ExpectedBlocks = createDto.BlockChecksums.ToList(),
         };
         existingFile.FileTransactions.Add(newTransaction);
         await repoWrap.FileTransactionRepo.InsertAsync(newTransaction);
@@ -152,7 +159,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         return new()
         {
             FileId = existingFile.Id,
-            TransactionId = newTransaction.Id,
+            Id = newTransaction.Id,
             Type = createDto.Type,
         };
     }
@@ -161,7 +168,9 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     public async Task<FileTransactionFinishDto> FinishFileTransaction(Guid transactionId)
     {
         #region load transaction
-        var transaction = await repoWrap.FileTransactionRepo.QueryAll().FirstOrDefaultAsync(x => x.Id == transactionId);
+        var transaction = await repoWrap.FileTransactionRepo
+            .QueryAll()
+            .FirstOrDefaultAsync(x => x.Id == transactionId);
         if (transaction == null)
         {
             throw new NotFoundUSException();
@@ -171,19 +180,44 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         {
             throw new TransactionAlreadyCompleteUSException();
         }
+
+        var file = transaction.File;
         #endregion 
         
         #region checks
-        if (transaction.ExpectedBlocks != transaction.ReceivedBlocks)
+        if (transaction.ExpectedBlocks.Count != transaction.ReceivedBlocks.Count || transaction.ExpectedBlocks.Except(transaction.ReceivedBlocks).Any())
         {
             throw new TransactionBlockMismatchUSException();
         }
+
+        string libpath = LibraryUtil.GetLibraryDirectory(transaction.File.Library.Id,
+            apps.GetAppsettings().Storage.LibraryLocation);
+        #endregion
         
+        #region write combined blocks to disk
+        await CombineAndDiscardTempBlocks(transaction.File.Library.Id, transaction.File.FileLibraryPath, transaction.ExpectedBlocks);
+        #endregion
+        
+        string assembledFileChecksum = await FileUtil.GetFileTotalChecksumAsync(FileUtil.FileLibPathToSysPath(libpath, file.FileLibraryPath));
+        //if (transaction.ExpectedChecksum != assembledFileChecksum)
+        //{
+        //    throw new TransactionChecksumMismatchUSException();
+        //}
+        
+        #region Update file db entity
+        file.TotalChecksum = assembledFileChecksum;
+        await repoWrap.FileRepo.UpdateAsync(file);
+        #endregion
+        
+        #region update transaction db entity
         transaction.Status = EFileTransactionStatus.COMPLETE;
         await repoWrap.FileTransactionRepo.UpdateAsync(transaction);
         #endregion
-        
-        throw new NotImplementedException();
+
+        return new()
+        {
+            Success = true
+        };
     }
     #endregion
     #region POST - Push block
@@ -218,18 +252,100 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     }
     #endregion
     #region POST - Create diff
-    public Task<LibraryDiffDto> CreateLibraryDiff(CreateDiffDto dto)
+    public async Task<LibraryDiffDto> CreateLibraryDiff(CreateDiffDto dto)
     {
-        throw new NotImplementedException();
+        #region load lib
+        var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(dto.LibraryId);
+        #endregion
+        
+        #region gen diff
+
+        List<string> missingOnRemote = new();
+        List<string> missingOnLocal = new();
+        
+        var onRemote = await repoWrap.FileRepo.QueryAll()
+            .Where(x => dto.FilesOnLocal.FirstOrDefault(y => y.FileLibraryPath == x.FileLibraryPath) != null)
+            .ToListAsync();
+        LibraryDiffDto diff = new();
+        foreach (var file in dto.FilesOnLocal)
+        {
+            var remoteMatch = onRemote.FirstOrDefault(x => x.FileLibraryPath == file.FileLibraryPath);
+            if (remoteMatch == null)
+            {
+                missingOnRemote.Add(file.FileLibraryPath);
+                continue;
+            }
+
+            if (remoteMatch.TotalChecksum == file.TotalChecksum)
+            {
+                // Discard, files are in sync
+                continue;
+            }
+            
+            if (remoteMatch.ModifiedOn > file.ModifiedOn)
+            {
+                missingOnLocal.Add(file.FileLibraryPath);
+            }
+            else
+            {
+                missingOnRemote.Add(file.FileLibraryPath);
+            }
+        }
+        #endregion
+
+        return new()
+        {
+            RequiredByLocal = missingOnLocal,
+            RequiredByRemote = missingOnRemote,
+        };
     }
     #endregion
 
     private async Task WriteTempBlock(string checksum, byte[] bytes)
     {
-        string targetPath = Path.Join(apps.GetAppsettings().Storage.LibraryLocation, checksum);
+        string targetPath = Path.Join(apps.GetAppsettings().Storage.TempBlockLocation, checksum);
+        if (!Directory.Exists(apps.GetAppsettings().Storage.TempBlockLocation))
+        {
+            Directory.CreateDirectory(apps.GetAppsettings().Storage.TempBlockLocation);
+        }
+        
         using (FileStream fileStream = new FileStream(targetPath, FileMode.Create, FileAccess.Write))
         {
             await fileStream.WriteAsync(bytes, 0, bytes.Length);
         }
+    }
+
+    private async Task CombineAndDiscardTempBlocks(Guid libId, string targetFile, List<string> checksums)
+    {
+        string blocksDir = apps.GetAppsettings().Storage.TempBlockLocation;
+        string outputPath = FileUtil.FileLibPathToSysPath(LibraryUtil.GetLibraryDirectory(libId, apps.GetAppsettings().Storage.LibraryLocation), targetFile);
+        
+        // Ensure the output directory exists
+        string? directory = Path.GetDirectoryName(outputPath);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        // Combine file blocks and write to disk
+        using (FileStream outputStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write))
+        {
+            foreach (string check in checksums)
+            {
+                string blockpath = Path.Join(blocksDir, check);
+                if (!Path.Exists(blockpath))
+                {
+                    throw new FileNotFoundException($"Block file not found: {check}");
+                }
+
+                using (FileStream inputStream = new FileStream(blockpath, FileMode.Open, FileAccess.Read))
+                {
+                    await inputStream.CopyToAsync(outputStream);
+                }
+            }
+        }
+
+        Console.WriteLine($"File successfully combined and written to: {outputPath}");
+        
     }
 }

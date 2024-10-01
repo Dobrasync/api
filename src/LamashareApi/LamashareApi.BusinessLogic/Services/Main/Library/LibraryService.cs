@@ -3,15 +3,17 @@ using Gridify;
 using Gridify.EntityFramework;
 using Lamashare.BusinessLogic.Dtos.Library;
 using Lamashare.BusinessLogic.Mapper.Gridify;
+using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using Lamashare.BusinessLogic.Services.Core.Localization;
 using LamashareApi.Database.Repos;
+using LamashareApi.Shared.Constants;
 using LamashareApi.Shared.Exceptions.UserspaceException;
 using LamashareApi.Shared.Localization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lamashare.BusinessLogic.Services.Main.Library;
 
-public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalizationService localizationService) : ILibraryService
+public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalizationService localizationService, IAppsettingsProvider apps) : ILibraryService
 {
 
     public async Task<LibraryDto> CreateLibrary(LibraryCreateDto createDto)
@@ -20,12 +22,18 @@ public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalization
             .FirstOrDefaultAsync(x => x.Name.ToLower() == createDto.Name);
 
         if (library != null) throw new LibraryNameConflictUSException();
-
+        
         LamashareApi.Database.DB.Entities.Library inserted = await repoWrap.LibraryRepo.InsertAsync(new LamashareApi.Database.DB.Entities.Library()
         {
             Name = createDto.Name
         });
 
+        #region create new library dir
+        string targetLibPath =
+            LibraryUtil.GetLibraryDirectory(inserted.Id, apps.GetAppsettings().Storage.LibraryLocation);
+        Directory.CreateDirectory(targetLibPath);
+        #endregion
+        
         return mapper.Map<LibraryDto>(inserted);
     }
 

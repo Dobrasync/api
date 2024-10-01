@@ -4,6 +4,7 @@ public class FileTransactionCreateDto
 {
     public Guid LibraryId { get; set; }
     public string FileLibraryPath { get; set; } = default!;
+    public DateTime ModifiedOn { get; set; } = default!;
     public EFileTransactionType Type { get; set; }
     
     /// <summary>
