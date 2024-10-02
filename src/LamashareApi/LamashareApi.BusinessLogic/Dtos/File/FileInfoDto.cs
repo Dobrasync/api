@@ -7,4 +7,5 @@ public class FileInfoDto
     public string TotalChecksum { get; set; } = default!;
     public string FileLibraryPath { get; set; } = default!;
     public DateTime ModifiedOn { get; set; }
+    public DateTime CreatedOn { get; set; }
 }

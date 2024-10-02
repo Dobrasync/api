@@ -43,6 +43,7 @@ public class GenericTestFixture : IAsyncLifetime
         #endregion
         #region upload a file
         #region create transaction
+        var fileinfo = new FileInfo(TestFileSourcePath);
         var blocks = FileUtil.GetFileBlocks(TestFileSourcePath);
         string fileTotalChecksum = await FileUtil.GetFileTotalChecksumAsync(TestFileSourcePath);
         var transaction = await fileService.CreateFileTransaction(new()
@@ -52,6 +53,8 @@ public class GenericTestFixture : IAsyncLifetime
             BlockChecksums = blocks.Select(x => x.Checksum).ToArray(),
             TotalChecksum = fileTotalChecksum,
             FileLibraryPath = TestFilePath,
+            ModifiedOn = fileinfo.LastWriteTimeUtc,
+            CreatedOn = fileinfo.CreationTimeUtc,
         });
         #endregion
         #region push blocks

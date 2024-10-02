@@ -6,8 +6,10 @@ using LamashareApi.Database.Enums;
 using LamashareApi.Database.Repos;
 using LamashareApi.Shared.Constants;
 using LamashareApi.Shared.Exceptions.UserspaceException;
+using LamashareCore.Models;
 using LamashareCore.Util;
 using Microsoft.EntityFrameworkCore;
+using BlockDto = Lamashare.BusinessLogic.Dtos.File.BlockDto;
 
 namespace Lamashare.BusinessLogic.Services.Main.File;
 
@@ -41,7 +43,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         #region generate info
 
         string fileSysPath =
-            FileUtil.FileLibPathToSysPath(apps.GetAppsettings().Storage.LibraryLocation, libraryFilePath);
+            Path.Combine(LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation), libraryFilePath);
         FileInfo fileInfo = new FileInfo(fileSysPath);
         if (!fileInfo.Exists)
         {
@@ -77,7 +79,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
         #endregion
         #region generate blocklist
-        string syspath = FileUtil.FileLibPathToSysPath(apps.GetAppsettings().Storage.LibraryLocation, libraryFilePath);
+        string syspath = Path.Combine(LibraryUtil.GetLibraryDirectory(libraryId, apps.GetAppsettings().Storage.LibraryLocation), libraryFilePath);
         var blocks = FileUtil.GetFileBlocks(syspath);
         #endregion
 
@@ -127,6 +129,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
                 Library = lib,
                 TotalChecksum = createDto.TotalChecksum,
                 ModifiedOn = createDto.ModifiedOn,
+                CreatedOn = createDto.CreatedOn
             });
         }
         #endregion
@@ -170,6 +173,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         #region load transaction
         var transaction = await repoWrap.FileTransactionRepo
             .QueryAll()
+            .Include(x => x.File)
             .FirstOrDefaultAsync(x => x.Id == transactionId);
         if (transaction == null)
         {
@@ -195,7 +199,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         #endregion
         
         #region write combined blocks to disk
-        await CombineAndDiscardTempBlocks(transaction.File.Library.Id, transaction.File.FileLibraryPath, transaction.ExpectedBlocks);
+        await CombineAndDiscardTempBlocks(transaction.File.Library.Id, transaction.File.FileLibraryPath, transaction.ExpectedBlocks, transaction.File.ModifiedOn, transaction.File.CreatedOn);
         #endregion
         
         string assembledFileChecksum = await FileUtil.GetFileTotalChecksumAsync(FileUtil.FileLibPathToSysPath(libpath, file.FileLibraryPath));
@@ -315,7 +319,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         }
     }
 
-    private async Task CombineAndDiscardTempBlocks(Guid libId, string targetFile, List<string> checksums)
+    private async Task CombineAndDiscardTempBlocks(Guid libId, string targetFile, List<string> checksums, DateTime createdOn, DateTime modifiedOn)
     {
         string blocksDir = apps.GetAppsettings().Storage.TempBlockLocation;
         string outputPath = FileUtil.FileLibPathToSysPath(LibraryUtil.GetLibraryDirectory(libId, apps.GetAppsettings().Storage.LibraryLocation), targetFile);
@@ -343,6 +347,16 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
                     await inputStream.CopyToAsync(outputStream);
                 }
             }
+        }
+        
+        // Restore metadata
+        global::System.IO.File.SetCreationTimeUtc(outputPath, createdOn);
+        global::System.IO.File.SetLastWriteTimeUtc(outputPath, modifiedOn);
+
+        foreach (var block in checksums)
+        {
+            string blockpath = Path.Join(blocksDir, block);
+            global::System.IO.File.Delete(blockpath);
         }
 
         Console.WriteLine($"File successfully combined and written to: {outputPath}");

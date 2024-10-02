@@ -66,6 +66,7 @@ public class FileServiceTest : IClassFixture<GenericTestFixture>
             BlockChecksums = blocklist.Select(x => x.Checksum).ToArray(),
             TotalChecksum = totalchecksum,
             ModifiedOn = DateTime.Now,
+            CreatedOn = DateTime.Now,
             LibraryId = GenericTestFixture.LibraryId,
             Type = EFileTransactionType.PUSH
         });
