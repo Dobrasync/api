@@ -11,5 +11,6 @@ public class File : BaseEntity
     public string FileLibraryPath { get; set; } = default!;
 
     public DateTime ModifiedOn { get; set; } = default!;
+    public DateTime CreatedOn { get; set; } = default!;
     public List<FileTransaction> FileTransactions { get; set; } = new();
 }
