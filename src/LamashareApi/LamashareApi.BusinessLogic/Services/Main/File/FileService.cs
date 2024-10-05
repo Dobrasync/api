@@ -116,6 +116,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     public async Task<FileTransactionDto> CreateFileTransaction(FileTransactionCreateDto createDto)
     {
         #region load file
+        bool hasFileJustBeenCreated = false;
         var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(createDto.LibraryId);
         var existingFile = await repoWrap.FileRepo.QueryAll()
             .FirstOrDefaultAsync(x => x.FileLibraryPath == createDto.FileLibraryPath);
@@ -127,6 +128,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
         if (existingFile == null && createDto.Type == EFileTransactionType.PUSH)
         {
+            hasFileJustBeenCreated = true;
             existingFile = await repoWrap.FileRepo.InsertAsync(new()
             {
                 FileLibraryPath = createDto.FileLibraryPath,
@@ -168,6 +170,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         
         #endregion
         #region prepare temp blocks
+        List<string> blocksRequiredByRemoteOnPush = new();
         if (createDto.Type == EFileTransactionType.PULL)
         {
             var blocks = FileUtil.GetFileBlocks(Path.Join(LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation), existingFile.FileLibraryPath));
@@ -177,13 +180,21 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         {
             var existingBlocks = await repoWrap.BlockRepo.QueryAll()
                 .Include(x => x.File)
-                .Where(x => createDto.BlockChecksums.Contains(x.Checksum))
+                .Where(x => createDto.BlockChecksums.Contains(x.Checksum) && !(hasFileJustBeenCreated && x.File == existingFile))
                 .ToListAsync();
 
             foreach (var block in existingBlocks)
             {
                 var blockContent = await FileUtil.GetFileBlock(block.Checksum, block.File.FileLibraryPath, block.Size, block.Offset);
                 await WriteTempBlock(block.Checksum, blockContent);
+            }
+
+            foreach (var blockOnClient in createDto.BlockChecksums)
+            {
+                if (!existingBlocks.Select(x => x.Checksum).Contains(blockOnClient))
+                {
+                    blocksRequiredByRemoteOnPush.Add(blockOnClient);
+                }
             }
         }
         #endregion
@@ -193,6 +204,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             FileId = existingFile.Id,
             Id = newTransaction.Id,
             Type = createDto.Type,
+            RequiredBlocks = blocksRequiredByRemoteOnPush,
         };
     }
     #endregion
@@ -279,15 +291,12 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             throw new ArgumentException("Received blocks are null");
         }
         #endregion
-        #region load file
-        var file = await repoWrap.FileRepo.GetByIdAsyncThrows(blockDto.FileId);
-        #endregion
 
         await WriteTempBlock(blockDto.Checksum, blockDto.Content);
         
         await repoWrap.BlockRepo.InsertAsync(new()
         {
-            File = file,
+            File = transaction.File,
             Checksum = blockDto.Checksum,
             Library = lib,
             Offset = blockDto.Offset,
@@ -314,30 +323,34 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         List<string> missingOnRemote = new();
         List<string> missingOnLocal = new();
         
-        var onRemote = await repoWrap.FileRepo.QueryAll()
-            .Where(x => dto.FilesOnLocal.FirstOrDefault(y => y.FileLibraryPath == x.FileLibraryPath) != null)
+        var filesInRemoteLib = await repoWrap.FileRepo
+            .QueryAll()
+            .Where(x => x.Library == lib)
             .ToListAsync();
         LibraryDiffDto diff = new();
-        foreach (var file in dto.FilesOnLocal)
+        foreach (var file in filesInRemoteLib)
         {
-            var remoteMatch = onRemote.FirstOrDefault(x => x.FileLibraryPath == file.FileLibraryPath);
-            if (remoteMatch == null)
+            var localFileMatch = dto.FilesOnLocal.FirstOrDefault(x => x.FileLibraryPath == file.FileLibraryPath);
+            if (localFileMatch == null)
             {
-                missingOnRemote.Add(file.FileLibraryPath);
-                continue;
-            }
-
-            if (remoteMatch.TotalChecksum == file.TotalChecksum)
-            {
-                // Discard, files are in sync
+                missingOnLocal.Add(file.FileLibraryPath);
                 continue;
             }
             
-            if (remoteMatch.ModifiedOn > file.ModifiedOn)
+            if (localFileMatch.ModifiedOn > file.ModifiedOn)
             {
                 missingOnLocal.Add(file.FileLibraryPath);
             }
             else
+            {
+                missingOnRemote.Add(file.FileLibraryPath);
+            }
+        }
+
+        foreach (var file in dto.FilesOnLocal)
+        {
+            var remoteFileMatch = filesInRemoteLib.FirstOrDefault(x => x.FileLibraryPath == file.FileLibraryPath);
+            if (remoteFileMatch == null)
             {
                 missingOnRemote.Add(file.FileLibraryPath);
             }
