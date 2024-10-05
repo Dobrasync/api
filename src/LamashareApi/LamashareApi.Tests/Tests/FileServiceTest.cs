@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LamashareApi.Tests.Tests;
 
+[Collection("Sync")]
 public class FileServiceTest : IClassFixture<GenericTestFixture>
 {
     private readonly IFileService fileService;
@@ -77,7 +78,6 @@ public class FileServiceTest : IClassFixture<GenericTestFixture>
             {
                 LibraryId = GenericTestFixture.LibraryId,
                 TransactionId = transaction.Id,
-                FileId = transaction.FileId,
                 
                 Checksum = block.Checksum,
                 Content = block.Payload,

@@ -64,7 +64,6 @@ public class GenericTestFixture : IAsyncLifetime
             {
                 TransactionId = transaction.Id,
                 LibraryId = createdLibrary.Id,
-                FileId = transaction.FileId,
                 Checksum = block.Checksum,
                 Content = block.Payload,
                 Offset = block.Offset,

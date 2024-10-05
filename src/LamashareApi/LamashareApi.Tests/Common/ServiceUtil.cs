@@ -39,7 +39,7 @@ public static class ServiceUtil
         #region DB
         services.AddDbContext<LamashareContext>(opt =>
         {
-            opt.UseInMemoryDatabase(databaseName: "Test");
+            opt.UseInMemoryDatabase(databaseName: $"Test-{Guid.NewGuid()}");
         });
         #endregion
         #region Services
