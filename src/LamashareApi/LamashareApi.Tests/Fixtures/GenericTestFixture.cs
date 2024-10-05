@@ -62,13 +62,13 @@ public class GenericTestFixture : IAsyncLifetime
         {
             await fileService.PushBlock(new()
             {
+                TransactionId = transaction.Id,
                 LibraryId = createdLibrary.Id,
+                FileId = transaction.FileId,
                 Checksum = block.Checksum,
                 Content = block.Payload,
                 Offset = block.Offset,
                 Size = block.Payload.Length,
-                TransactionId = transaction.Id,
-                SourceFileLibraryPath = TestFilePath,
             });
         }
         #endregion
