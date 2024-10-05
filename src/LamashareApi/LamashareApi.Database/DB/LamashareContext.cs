@@ -22,5 +22,16 @@ public class LamashareContext : DbContext
         builder.Entity<User>()
             .HasIndex(e => e.Username)
             .IsUnique();
+        
+        builder.Entity<FileTransaction>()
+            .Property(e => e.ExpectedBlocks)
+            .HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+        builder.Entity<FileTransaction>()
+            .Property(e => e.ReceivedBlocks)
+            .HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
     }
 }

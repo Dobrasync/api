@@ -75,18 +75,65 @@ public class FileServiceTest : IClassFixture<GenericTestFixture>
         {
             await fileService.PushBlock(new()
             {
+                LibraryId = GenericTestFixture.LibraryId,
+                TransactionId = transaction.Id,
+                FileId = transaction.FileId,
+                
                 Checksum = block.Checksum,
                 Content = block.Payload,
                 Offset = block.Offset,
                 Size = block.Payload.Length,
-                LibraryId = GenericTestFixture.LibraryId,
-                TransactionId = transaction.Id,
-                SourceFileLibraryPath = fileLibPath,
             });
         }
 
         var finalized = await fileService.FinishFileTransaction(transaction.Id);
 
         #endregion
+    }
+    
+    [Fact]
+    public async Task PullFileBlockList()
+    {
+        #region get file info
+        var fileInfo = await fileService.GetFileInfo(GenericTestFixture.LibraryId, GenericTestFixture.TestFilePath);
+        #endregion
+        #region create transaction
+        var trans = await fileService.CreateFileTransaction(new()
+        {
+            FileLibraryPath = GenericTestFixture.TestFilePath,
+            LibraryId = GenericTestFixture.LibraryId,
+            Type = EFileTransactionType.PULL,
+        });
+        #endregion
+        
+        #region pull blocks
+        var blocklist = await fileService.GetFileBlockList(GenericTestFixture.LibraryId, GenericTestFixture.TestFilePath);
+        List<BlockDto> receivedBlocks = new List<BlockDto>();
+        foreach (var block in blocklist)
+        {
+            var received = await fileService.PullBlock(block);
+            receivedBlocks.Add(new()
+            {
+                Checksum = received.Checksum,
+                Content = received.Content,
+            });
+        }
+        #endregion
+        
+        #region finish transaction
+        var finishedTrans = await fileService.FinishFileTransaction(trans.Id);
+        #endregion
+        
+        #region get temp file
+        string target = Path.GetTempFileName();
+        var bytes = receivedBlocks.SelectMany(x => x.Content!).ToArray();
+        await File.WriteAllBytesAsync(target, bytes);
+        string fileTarget = Path.GetTempFileName();
+        await FileUtil.FullRestoreFileFromBlocks([target], fileTarget, fileInfo.CreatedOn, fileInfo.ModifiedOn);
+        #endregion
+        
+        string expectedCheck = await FileUtil.GetFileTotalChecksumAsync(GenericTestFixture.TestFileSourcePath);
+        string receivedCheck = await FileUtil.GetFileTotalChecksumAsync(fileTarget);
+        Assert.Equal(expectedCheck, receivedCheck);
     }
 }
