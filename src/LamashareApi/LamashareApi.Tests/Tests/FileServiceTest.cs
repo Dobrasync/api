@@ -66,8 +66,8 @@ public class FileServiceTest : IClassFixture<GenericTestFixture>
             FileLibraryPath = fileLibPath,
             BlockChecksums = blocklist.Select(x => x.Checksum).ToArray(),
             TotalChecksum = totalchecksum,
-            ModifiedOn = DateTime.Now,
-            CreatedOn = DateTime.Now,
+            DateModified = DateTime.Now,
+            DateCreated = DateTime.Now,
             LibraryId = GenericTestFixture.LibraryId,
             Type = EFileTransactionType.PUSH
         });
@@ -129,7 +129,7 @@ public class FileServiceTest : IClassFixture<GenericTestFixture>
         var bytes = receivedBlocks.SelectMany(x => x.Content!).ToArray();
         await File.WriteAllBytesAsync(target, bytes);
         string fileTarget = Path.GetTempFileName();
-        await FileUtil.FullRestoreFileFromBlocks([target], fileTarget, fileInfo.CreatedOn, fileInfo.ModifiedOn);
+        await FileUtil.FullRestoreFileFromBlocks([target], fileTarget, fileInfo.DateCreated, fileInfo.DateModified);
         #endregion
         
         string expectedCheck = await FileUtil.GetFileTotalChecksumAsync(GenericTestFixture.TestFileSourcePath);

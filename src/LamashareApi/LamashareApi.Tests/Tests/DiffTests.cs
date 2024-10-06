@@ -30,8 +30,8 @@ public class DiffTests : IClassFixture<GenericTestFixture>
             FilesOnLocal = [new()
             {
                 LibraryId = GenericTestFixture.LibraryId,
-                CreatedOn = localFileInfo.CreationTimeUtc,
-                ModifiedOn = localFileInfo.LastWriteTimeUtc,
+                DateCreated = localFileInfo.CreationTimeUtc,
+                DateModified = localFileInfo.LastWriteTimeUtc,
                 TotalChecksum = localTotalChecksum,
                 FileLibraryPath = localFilePath,
             }],

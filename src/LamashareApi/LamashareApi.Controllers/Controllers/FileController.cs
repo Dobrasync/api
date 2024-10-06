@@ -116,7 +116,7 @@ public class FileController(IFileService fileService) : BaseController
     }
     #endregion
     #region POST - Create diff list
-    [HttpGet("diff")]
+    [HttpPost("diff")]
     [SwaggerOperation(
         Summary = "Get library diff",
         Description = "Generates a diff manifest.",

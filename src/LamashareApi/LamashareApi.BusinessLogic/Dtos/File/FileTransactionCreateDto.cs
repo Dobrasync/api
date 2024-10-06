@@ -18,8 +18,7 @@ public class FileTransactionCreateDto
     /// Required on PUSH
     /// Ignored on PULL
     /// </summary>
-    [RequiredIf(nameof(Type), EFileTransactionType.PUSH)]
-    public DateTime? ModifiedOn { get; set; }
+    public DateTimeOffset? DateModified { get; set; }
     
     /// <summary>
     /// UTC time the file was created.
@@ -27,8 +26,7 @@ public class FileTransactionCreateDto
     /// Required on PUSH
     /// Ignored on PULL
     /// </summary>
-    [RequiredIf(nameof(Type), EFileTransactionType.PUSH)]
-    public DateTime? CreatedOn { get; set; }
+    public DateTimeOffset? DateCreated { get; set; }
     
     /// <summary>
     /// List of block checksums - in desired final order.

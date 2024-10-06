@@ -38,8 +38,10 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     #region GET - File info
     public async Task<FileInfoDto> GetFileInfo(Guid libraryId, string libraryFilePath)
     {
-        #region load lib
+        #region load lib and file
         LamashareApi.Database.DB.Entities.Library lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
+        LamashareApi.Database.DB.Entities.File? file = await repoWrap.FileRepo.QueryAll().FirstOrDefaultAsync(x => x.FileLibraryPath == libraryFilePath);
+        if (file == null) throw new NotFoundUSException();
         #endregion
         #region generate info
 
@@ -54,7 +56,8 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         var infoDto = new FileInfoDto()
         {
             LibraryId = libraryId,
-            ModifiedOn = fileInfo.LastWriteTimeUtc,
+            DateModified = file.DateModified.UtcDateTime,
+            DateCreated = file.DateCreated.UtcDateTime,
             TotalChecksum = await FileUtil.GetFileTotalChecksumAsync(fileSysPath),
             FileLibraryPath = libraryFilePath,
         };
@@ -134,8 +137,8 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
                 FileLibraryPath = createDto.FileLibraryPath,
                 Library = lib,
                 TotalChecksum = createDto.TotalChecksum!,
-                ModifiedOn = createDto.ModifiedOn!.Value,
-                CreatedOn = createDto.CreatedOn!.Value,
+                DateModified = createDto.DateModified!.Value,
+                DateCreated = createDto.DateCreated!.Value,
             });
         }
 
@@ -153,13 +156,13 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         #endregion
         
         #region create transaction db entity
-
+        var creationDateTime = DateTime.UtcNow;
         var newTransaction = new FileTransaction()
         {
             File = existingFile,
             Status = EFileTransactionStatus.INCOMPLETE,
-            CreatedOn = createDto.Type == EFileTransactionType.PUSH ? createDto.CreatedOn : null,
-            LastUpdatedOn = createDto.Type == EFileTransactionType.PUSH ? createDto.ModifiedOn : null,
+            DateCreated = creationDateTime,
+            DateModified = creationDateTime,
             Type = createDto.Type,
             ExpectedChecksum = createDto.Type == EFileTransactionType.PUSH ? createDto.TotalChecksum : null,
             ExpectedBlocks = createDto.Type == EFileTransactionType.PUSH ? createDto.BlockChecksums!.ToList() : null,
@@ -215,6 +218,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         var transaction = await repoWrap.FileTransactionRepo
             .QueryAll()
             .Include(x => x.File)
+            .ThenInclude(x => x.Library)
             .FirstOrDefaultAsync(x => x.Id == transactionId);
         if (transaction == null)
         {
@@ -242,11 +246,22 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         #region finalize push transaction specific stuff
         if (transaction.Type == EFileTransactionType.PUSH)
         {
+            string fileSysPath = Path.Join(libpath, file.FileLibraryPath);
             #region write combined blocks to disk
-            await CombineAndDiscardTempBlocks(transaction.File.Library.Id, transaction.File.FileLibraryPath, transaction.ExpectedBlocks!, transaction.File.ModifiedOn, transaction.File.CreatedOn);
+            // Skip combination if no blocks were expected (empty file creation)
+            if (transaction.ExpectedBlocks.Any())
+            {
+                await CombineAndDiscardTempBlocks(transaction.File.Library.Id, fileSysPath, transaction.ExpectedBlocks!, transaction.File.DateModified, transaction.File.DateCreated);
+            }
+            else
+            {
+                await FileUtil.FullRestoreFileFromBlocks(new(), fileSysPath, transaction.File.DateCreated,
+                    transaction.File.DateModified);
+            }
             #endregion
             
-            string assembledFileChecksum = await FileUtil.GetFileTotalChecksumAsync(FileUtil.FileLibPathToSysPath(libpath, file.FileLibraryPath));
+            
+            string assembledFileChecksum = await FileUtil.GetFileTotalChecksumAsync(fileSysPath);
             //if (transaction.ExpectedChecksum != assembledFileChecksum)
             //{
             //    throw new TransactionChecksumMismatchUSException();
@@ -337,7 +352,16 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
                 continue;
             }
             
-            if (localFileMatch.ModifiedOn > file.ModifiedOn)
+            // Here we have a tolerance value as precision issues might return false positives on equal values.
+            int tolerance = 1000;
+            if (Math.Abs((localFileMatch.DateModified.UtcDateTime - file.DateModified.UtcDateTime).Duration().TotalMilliseconds) <
+                tolerance)
+            {
+                // Files are in sync, ignore
+                continue;
+            }
+            
+            if (localFileMatch.DateModified.UtcDateTime < file.DateModified.UtcDateTime)
             {
                 missingOnLocal.Add(file.FileLibraryPath);
             }
@@ -389,12 +413,11 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         }
     }
 
-    private async Task CombineAndDiscardTempBlocks(Guid libId, string targetFile, List<string> checksums, DateTime createdOn, DateTime modifiedOn)
+    private async Task CombineAndDiscardTempBlocks(Guid libId, string outputSysPath, List<string> checksums, DateTimeOffset createdOn, DateTimeOffset modifiedOn)
     {
         string c = apps.GetAppsettings().Storage.TempBlockLocation;
-        string outputPath = FileUtil.FileLibPathToSysPath(LibraryUtil.GetLibraryDirectory(libId, apps.GetAppsettings().Storage.LibraryLocation), targetFile);
         
-        await FileUtil.FullRestoreFileFromBlocks(checksums.Select(x => Path.Join(c, x)).ToList(), outputPath, createdOn, modifiedOn);
+        await FileUtil.FullRestoreFileFromBlocks(checksums.Select(x => Path.Join(c, x)).ToList(), outputSysPath, createdOn, modifiedOn);
     }
 
     private async Task<bool> IsFileLocked(Guid fileId)

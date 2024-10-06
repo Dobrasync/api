@@ -6,6 +6,6 @@ public class FileInfoDto
     public Guid LibraryId { get; set; }
     public string TotalChecksum { get; set; } = default!;
     public string FileLibraryPath { get; set; } = default!;
-    public DateTime ModifiedOn { get; set; }
-    public DateTime CreatedOn { get; set; }
+    public DateTimeOffset DateModified { get; set; }
+    public DateTimeOffset DateCreated { get; set; }
 }
