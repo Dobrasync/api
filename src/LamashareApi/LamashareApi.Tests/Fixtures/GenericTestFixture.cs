@@ -53,8 +53,8 @@ public class GenericTestFixture : IAsyncLifetime
             BlockChecksums = blocks.Select(x => x.Checksum).ToArray(),
             TotalChecksum = fileTotalChecksum,
             FileLibraryPath = TestFilePath,
-            ModifiedOn = fileinfo.LastWriteTimeUtc,
-            CreatedOn = fileinfo.CreationTimeUtc,
+            DateModified = fileinfo.LastWriteTimeUtc,
+            DateCreated = fileinfo.CreationTimeUtc,
         });
         #endregion
         #region push blocks

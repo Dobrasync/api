@@ -8,6 +8,7 @@ using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using Lamashare.BusinessLogic.Services.Core.Jwt;
 using Lamashare.BusinessLogic.Services.Core.Localization;
 using Lamashare.BusinessLogic.Services.Main.Auth;
+using Lamashare.BusinessLogic.Services.Main.File;
 using Lamashare.BusinessLogic.Services.Main.InvokerService;
 using Lamashare.BusinessLogic.Services.Main.Library;
 using Lamashare.BusinessLogic.Services.Main.System;
@@ -123,6 +124,7 @@ builder.Services.AddDbContext<LamashareContext>(opt =>
 });
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IInvokerService, InvokerService>();

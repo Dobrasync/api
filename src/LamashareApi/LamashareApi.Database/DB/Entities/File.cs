@@ -15,9 +15,9 @@ public class File : BaseEntity
     [MinLength(LengthConstraints.FileLibraryPathMinLength), MaxLength(LengthConstraints.FileLibraryPathMaxLength)] 
     public string FileLibraryPath { get; set; } = default!;
     
-    public DateTime ModifiedOn { get; set; } = default!;
+    public DateTimeOffset DateModified { get; set; }
     
-    public DateTime CreatedOn { get; set; } = default!;
+    public DateTimeOffset DateCreated { get; set; }
     
     public List<FileTransaction> FileTransactions { get; set; } = new();
     
