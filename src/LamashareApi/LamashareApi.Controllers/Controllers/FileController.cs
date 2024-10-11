@@ -128,4 +128,18 @@ public class FileController(IFileService fileService) : BaseController
         return Ok(await fileService.CreateLibraryDiff(dto));
     }
     #endregion
+    #region DELETE - Delete a file
+    [HttpDelete("{libraryId}")]
+    [SwaggerOperation(
+        Summary = "Delete a file",
+        Description = "Deletes the given file and its blocks.",
+        OperationId = nameof(DeleteFile)
+    )]
+    [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok))]
+    public async Task<IActionResult> DeleteFile(Guid libraryId, [FromQuery] string fileLibraryPath)
+    {
+        await fileService.DeleteFile(libraryId, fileLibraryPath);
+        return Ok();
+    }
+    #endregion
 }
