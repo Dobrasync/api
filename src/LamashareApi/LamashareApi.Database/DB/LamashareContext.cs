@@ -24,12 +24,17 @@ public class LamashareContext : DbContext
             .IsUnique();
         
         builder.Entity<FileTransaction>()
-            .Property(e => e.ExpectedBlocks)
+            .Property(e => e.TotalBlocks)
             .HasConversion(
                 v => string.Join(',', v),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
         builder.Entity<FileTransaction>()
             .Property(e => e.ReceivedBlocks)
+            .HasConversion(
+                v => string.Join(',', v),
+                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
+        builder.Entity<FileTransaction>()
+            .Property(e => e.RequiredBlocks)
             .HasConversion(
                 v => string.Join(',', v),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());

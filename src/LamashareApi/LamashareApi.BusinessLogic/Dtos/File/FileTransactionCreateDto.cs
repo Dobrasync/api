@@ -18,7 +18,7 @@ public class FileTransactionCreateDto
     /// Required on PUSH
     /// Ignored on PULL
     /// </summary>
-    public DateTimeOffset? DateModified { get; set; }
+    public DateTimeOffset DateModifiedFile { get; set; }
     
     /// <summary>
     /// UTC time the file was created.
@@ -26,7 +26,7 @@ public class FileTransactionCreateDto
     /// Required on PUSH
     /// Ignored on PULL
     /// </summary>
-    public DateTimeOffset? DateCreated { get; set; }
+    public DateTimeOffset DateCreatedFile { get; set; }
     
     /// <summary>
     /// List of block checksums - in desired final order.

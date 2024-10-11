@@ -32,4 +32,7 @@ public interface IFileService
     #region POST - Create diff
     public Task<LibraryDiffDto> CreateLibraryDiff(CreateDiffDto dto);
     #endregion
+    #region DELETE - Delete file
+    public Task DeleteFile(Guid libraryId, string libraryFilePath);
+    #endregion
 }
