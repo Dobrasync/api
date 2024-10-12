@@ -1,6 +1,5 @@
 using LamashareApi.Database.DB.Entities;
 using Microsoft.EntityFrameworkCore;
-using File = LamashareApi.Database.DB.Entities.File;
 
 namespace LamashareApi.Database.DB;
 
@@ -10,30 +9,30 @@ public class LamashareContext : DbContext
     {
     }
 
-    public virtual DbSet<SystemSetting> SystemSettings { get; set; }
-    public virtual DbSet<FileTransaction> FileTransactions { get; set; }
-    public virtual DbSet<Block> Blocks { get; set; }
-    public virtual DbSet<File> Files { get; set; }
-    public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<Library> Libraries { get; set; }
+    public virtual DbSet<SystemSettingEntity> SystemSettings { get; set; }
+    public virtual DbSet<FileTransactionEntity> FileTransactions { get; set; }
+    public virtual DbSet<BlockEntity> Blocks { get; set; }
+    public virtual DbSet<FileEntity> Files { get; set; }
+    public virtual DbSet<UserEntity> Users { get; set; }
+    public virtual DbSet<LibraryEntity> Libraries { get; set; }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<User>()
+        builder.Entity<UserEntity>()
             .HasIndex(e => e.Username)
             .IsUnique();
         
-        builder.Entity<FileTransaction>()
+        builder.Entity<FileTransactionEntity>()
             .Property(e => e.TotalBlocks)
             .HasConversion(
                 v => string.Join(',', v),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
-        builder.Entity<FileTransaction>()
+        builder.Entity<FileTransactionEntity>()
             .Property(e => e.ReceivedBlocks)
             .HasConversion(
                 v => string.Join(',', v),
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());
-        builder.Entity<FileTransaction>()
+        builder.Entity<FileTransactionEntity>()
             .Property(e => e.RequiredBlocks)
             .HasConversion(
                 v => string.Join(',', v),

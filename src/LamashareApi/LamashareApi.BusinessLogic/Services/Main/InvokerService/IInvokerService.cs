@@ -5,8 +5,8 @@ namespace Lamashare.BusinessLogic.Services.Main.InvokerService;
 
 public interface IInvokerService
 {
-    Task<User?> TryGetInvokerAsync();
-    Task<User> GetInvokerAsyncThrows();
+    Task<UserEntity?> TryGetInvokerAsync();
+    Task<UserEntity> GetInvokerAsyncThrows();
     AuthJwtClaims GetInvokerAuthJwtClaimsThrows();
 
 }
