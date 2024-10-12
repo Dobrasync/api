@@ -22,6 +22,14 @@ public class LamashareContext : DbContext
             .HasIndex(e => e.Username)
             .IsUnique();
         
+        builder.Entity<FileEntity>()
+            .HasIndex(e => e.FileLibraryPath)
+            .IsUnique();
+        
+        builder.Entity<BlockEntity>()
+            .HasIndex(e => e.Checksum)
+            .IsUnique();
+        
         builder.Entity<FileTransactionEntity>()
             .Property(e => e.TotalBlocks)
             .HasConversion(

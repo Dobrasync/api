@@ -101,7 +101,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             .QueryAll()
             .Include(x => x.Blocks)
             .Include(x => x.Library)
-            .FirstOrDefaultAsync(x => x.Blocks.Exists(y => y.Checksum == blockChecksum));
+            .FirstOrDefaultAsync(x => x.Blocks.Any(y => y.Checksum == blockChecksum));
 
         if (file == null)
         {
@@ -197,7 +197,8 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             List<FileEntity> filesContainingRequiredBlocks = await repoWrap.FileRepo
                 .QueryAll()
                 .Include(x => x.Blocks)
-                .Where(x => x.Blocks.Exists(y => createDto.BlockChecksums!.Contains(y.Checksum)) && !(hasFileJustBeenCreated && x == existingFile))
+                .Where(x => !(hasFileJustBeenCreated && x == existingFile))
+                .Where(x => x.Blocks.Any(y => createDto.BlockChecksums.Contains(y.Checksum)))
                 .ToListAsync();
             
             List<BlockEntity> blocksOnly = filesContainingRequiredBlocks.SelectMany(x => x.Blocks).Distinct().ToList();
@@ -464,7 +465,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         #region Delete orphan blocks from db
         // delete blocks from db that are only present in the just deleted file
         List<BlockEntity> blocksToDelete = dbFileEntity.Blocks
-            .Where(x => x.Files.Count() == 1)
+            .Where(x => x.Files.Count() <= 1)
             .ToList();
         await repoWrap.BlockRepo.DeleteRangeAsync(blocksToDelete);
         #endregion

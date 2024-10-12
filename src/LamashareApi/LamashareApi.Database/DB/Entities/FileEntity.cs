@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using LamashareApi.Database.Const;
+using LamashareApi.Database.DB.Entities.Base;
 
 namespace LamashareApi.Database.DB.Entities;
 
