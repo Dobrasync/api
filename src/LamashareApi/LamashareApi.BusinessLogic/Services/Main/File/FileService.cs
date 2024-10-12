@@ -242,6 +242,9 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             .QueryAll()
             .Include(x => x.File)
             .ThenInclude(x => x.Library)
+            .Include(x => x.File)
+            .ThenInclude(x => x.Blocks)
+            .ThenInclude(x => x.Library)
             .FirstOrDefaultAsync(x => x.Id == transactionId);
         #endregion 
         #region checks
@@ -372,6 +375,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             Offset = blockDto.Offset,
             Size = blockDto.Size,
         });
+
         transaction.ReceivedBlocks.Add(blockDto.Checksum);
         transaction.DateModified = DateTimeOffset.UtcNow;
         await repoWrap.FileTransactionRepo.UpdateAsync(transaction);
