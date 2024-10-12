@@ -10,11 +10,11 @@ namespace Lamashare.BusinessLogic.Services.Main.InvokerService;
 
 public class InvokerService(IHttpContextAccessor httpContextAccessor, IJwtService jwtService, IRepoWrapper repoWrap) : IInvokerService
 {
-    public async Task<User?> TryGetInvokerAsync()
+    public async Task<UserEntity?> TryGetInvokerAsync()
     {
         try
         {
-            User? user = await GetInvokerAsyncThrows();
+            UserEntity? user = await GetInvokerAsyncThrows();
             return user;
         }
         catch (Exception)
@@ -23,12 +23,12 @@ public class InvokerService(IHttpContextAccessor httpContextAccessor, IJwtServic
         }
     }
 
-    public async Task<User> GetInvokerAsyncThrows()
+    public async Task<UserEntity> GetInvokerAsyncThrows()
     {
         //AuthJwtClaims claims = GetInvokerAuthJwtClaimsThrows();
 
         //User? user = await repoWrap.UserRepo.GetByIdAsync(claims.UserId);
-        User? user = await repoWrap.UserRepo.QueryAll().FirstOrDefaultAsync();
+        UserEntity? user = await repoWrap.UserRepo.QueryAll().FirstOrDefaultAsync();
         
         if (user == null)
             throw new InvalidAuthTokenUSException();

@@ -1,7 +1,6 @@
 namespace LamashareApi.Database.DB.Entities;
 
-public class Library : BaseEntity
+public class LibraryEntity : BaseEntity
 {
-    public Guid Id { get; set; }
     public string Name { get; set; } = default!;
 }

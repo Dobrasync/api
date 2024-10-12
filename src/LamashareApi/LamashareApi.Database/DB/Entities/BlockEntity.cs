@@ -4,18 +4,16 @@ using LamashareApi.Database.Const;
 
 namespace LamashareApi.Database.DB.Entities;
 
-public class Block : BaseEntity
+public class BlockEntity : BaseEntity
 {
-    public Guid Id { get; set; }
-    
     [MinLength(LengthConstraints.BlockChecksumLength), MaxLength(LengthConstraints.BlockChecksumLength)]
     public string Checksum { get; set; } = default!;
     
-    public File File { get; set; } = default!;
+    public List<FileEntity> Files { get; set; } = new();
     
     public long Offset { get; set; }
     
     public int Size { get; set; }
     
-    public Library Library { get; set; } = default!;
+    public LibraryEntity Library { get; set; } = default!;
 }

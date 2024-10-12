@@ -1,50 +1,49 @@
 using LamashareApi.Database.DB;
 using LamashareApi.Database.DB.Entities;
 using Microsoft.AspNetCore.Http;
-using File = LamashareApi.Database.DB.Entities.File;
 
 namespace LamashareApi.Database.Repos;
 
 public class RepoWrapper(LamashareContext context, IHttpContextAccessor hca) : IRepoWrapper
 {
-    private IRepo<SystemSetting> _systemSettingRepo = null!;
-    private IRepo<File> _fileRepo = null!;
-    private IRepo<Library> _libraryRepo = null!;
-    private IRepo<User> _userRepo = null!;
-    private IRepo<Block> _blockRepo = null!;
-    private IRepo<FileTransaction> _fileTransactionRepo = null!;
+    private IRepo<SystemSettingEntity> _systemSettingRepo = null!;
+    private IRepo<FileEntity> _fileRepo = null!;
+    private IRepo<LibraryEntity> _libraryRepo = null!;
+    private IRepo<UserEntity> _userRepo = null!;
+    private IRepo<BlockEntity> _blockRepo = null!;
+    private IRepo<FileTransactionEntity> _fileTransactionRepo = null!;
 
     public LamashareContext DbContext => context;
 
     #region Repos
-    public IRepo<SystemSetting> SystemSettingRepo
+    public IRepo<SystemSettingEntity> SystemSettingRepo
     {
-        get { return _systemSettingRepo ??= new Repo<SystemSetting>(context, hca); }
+        get { return _systemSettingRepo ??= new Repo<SystemSettingEntity>(context, hca); }
     }
 
-    public IRepo<User> UserRepo
+    public IRepo<UserEntity> UserRepo
     {
-        get { return _userRepo ??= new Repo<User>(context, hca); }
+        get { return _userRepo ??= new Repo<UserEntity>(context, hca); }
     }
 
-    public IRepo<File> FileRepo
+    public IRepo<FileEntity> FileRepo
     {
-        get { return _fileRepo ??= new Repo<File>(context, hca); }
+        get { return _fileRepo ??= new Repo<FileEntity>(context, hca); }
     }
 
-    public IRepo<Library> LibraryRepo
+    public IRepo<LibraryEntity> LibraryRepo
     {
-        get { return _libraryRepo ??= new Repo<Library>(context, hca); }
+        get { return _libraryRepo ??= new Repo<LibraryEntity>(context, hca); }
     }
     
-    public IRepo<Block> BlockRepo
+    public IRepo<BlockEntity> BlockRepo
     {
-        get { return _blockRepo ??= new Repo<Block>(context, hca); }
+        get { return _blockRepo ??= new Repo<BlockEntity>(context, hca); }
     }
     
-    public IRepo<FileTransaction> FileTransactionRepo
+    public IRepo<FileTransactionEntity> FileTransactionRepo
     {
-        get { return _fileTransactionRepo ??= new Repo<FileTransaction>(context, hca); }
+        get { return _fileTransactionRepo ??= new Repo<FileTransactionEntity>(context, hca); }
     }
 
     #endregion

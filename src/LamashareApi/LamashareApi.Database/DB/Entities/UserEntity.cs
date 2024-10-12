@@ -3,10 +3,8 @@ using LamashareApi.Shared.Permissions;
 
 namespace LamashareApi.Database.DB.Entities;
 
-public class User : BaseEntity
+public class UserEntity : BaseEntity
 {
-    public Guid Id { get; set; }
-    
     [MaxLength(64)]
     public string Username { get; set; } = default!;
 
@@ -15,5 +13,5 @@ public class User : BaseEntity
     
     public EUserRole Role { get; set; } = default!;
     
-    public virtual List<Library> Libraries { get; set; } = default!;
+    public virtual List<LibraryEntity> Libraries { get; set; } = default!;
 }

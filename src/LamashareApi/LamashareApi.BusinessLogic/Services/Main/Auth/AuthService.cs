@@ -26,7 +26,7 @@ public class AuthService(IJwtService jwtService, IInvokerService invokerService,
 
     public async Task<AuthDto> CreateTokenClassic(ClassicLoginDto dto)
     {
-        User invoker = await GetUserMatchingCredentialsThrows(dto);
+        UserEntity invoker = await GetUserMatchingCredentialsThrows(dto);
 
         AuthJwtClaims claims = AuthJwtClaims.FromUser(invoker);
         AuthDto authTokenDto = MakeAuthDto(claims);
@@ -34,9 +34,9 @@ public class AuthService(IJwtService jwtService, IInvokerService invokerService,
         return authTokenDto;
     }
 
-    public async Task<User> GetUserMatchingCredentialsThrows(ClassicLoginDto loginDto)
+    public async Task<UserEntity> GetUserMatchingCredentialsThrows(ClassicLoginDto loginDto)
     {
-        User? usernameMatch = await repoWrap.UserRepo.QueryAll()
+        UserEntity? usernameMatch = await repoWrap.UserRepo.QueryAll()
             .FirstOrDefaultAsync(x => x.Username.ToLower() == loginDto.Username.ToLower());
 
         if (usernameMatch == null) 
@@ -50,7 +50,7 @@ public class AuthService(IJwtService jwtService, IInvokerService invokerService,
 
     public async Task<SessionInfoDto> GetInvokerSessionInfo()
     {
-        User invoker = await invokerService.GetInvokerAsyncThrows();
+        UserEntity invoker = await invokerService.GetInvokerAsyncThrows();
 
         return new()
         {

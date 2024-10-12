@@ -29,7 +29,7 @@ public interface IAuthService
     /// <param name="loginDto"></param>
     /// <exception cref="InvalidCredentialsUSException">If no matching user can be found</exception>
     /// <returns></returns>
-    Task<User> GetUserMatchingCredentialsThrows(ClassicLoginDto loginDto);
+    Task<UserEntity> GetUserMatchingCredentialsThrows(ClassicLoginDto loginDto);
     
     /// <summary>
     /// Returns info about the invokers' session.

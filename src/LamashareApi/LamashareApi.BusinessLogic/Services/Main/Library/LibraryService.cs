@@ -18,12 +18,12 @@ public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalization
 
     public async Task<LibraryDto> CreateLibrary(LibraryCreateDto createDto)
     {
-        LamashareApi.Database.DB.Entities.Library? library = await repoWrap.LibraryRepo.QueryAll()
+        LamashareApi.Database.DB.Entities.LibraryEntity? library = await repoWrap.LibraryRepo.QueryAll()
             .FirstOrDefaultAsync(x => x.Name.ToLower() == createDto.Name);
 
         if (library != null) throw new LibraryNameConflictUSException();
         
-        LamashareApi.Database.DB.Entities.Library inserted = await repoWrap.LibraryRepo.InsertAsync(new LamashareApi.Database.DB.Entities.Library()
+        LamashareApi.Database.DB.Entities.LibraryEntity inserted = await repoWrap.LibraryRepo.InsertAsync(new LamashareApi.Database.DB.Entities.LibraryEntity()
         {
             Name = createDto.Name
         });
@@ -39,14 +39,14 @@ public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalization
 
     public async Task<LibraryDto> GetLibraryById(Guid guid)
     {
-        LamashareApi.Database.DB.Entities.Library? lib = await GetLibraryByIdShared(guid);
+        LamashareApi.Database.DB.Entities.LibraryEntity? lib = await GetLibraryByIdShared(guid);
 
         return mapper.Map<LibraryDto>(lib);
     }
 
     public async Task<LibraryDto> UpdateLibrary(Guid id, LibraryUpdateDto dto)
     {
-        LamashareApi.Database.DB.Entities.Library lib = await GetLibraryByIdShared(id);
+        LamashareApi.Database.DB.Entities.LibraryEntity lib = await GetLibraryByIdShared(id);
 
         mapper.Map(dto, lib);
 
@@ -62,9 +62,9 @@ public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalization
     
     #region get
 
-    private async Task<LamashareApi.Database.DB.Entities.Library> GetLibraryByIdShared(Guid id)
+    private async Task<LamashareApi.Database.DB.Entities.LibraryEntity> GetLibraryByIdShared(Guid id)
     {
-        LamashareApi.Database.DB.Entities.Library? lib = await repoWrap.LibraryRepo.QueryAll().FirstOrDefaultAsync(x => x.Id == id);
+        LamashareApi.Database.DB.Entities.LibraryEntity? lib = await repoWrap.LibraryRepo.QueryAll().FirstOrDefaultAsync(x => x.Id == id);
 
         if (lib == null)
             throw new NotFoundUSException();
@@ -75,16 +75,16 @@ public class LibraryService(IRepoWrapper repoWrap, IMapper mapper, ILocalization
     
     #region pagination
 
-    private async Task<Paging<LibraryDto>> PaginateLibrary(IQueryable<LamashareApi.Database.DB.Entities.Library> queryable, GridifyQuery searchQuery)
+    private async Task<Paging<LibraryDto>> PaginateLibrary(IQueryable<LamashareApi.Database.DB.Entities.LibraryEntity> queryable, GridifyQuery searchQuery)
     {
-        Paging<LamashareApi.Database.DB.Entities.Library> filteredLibraries = await
+        Paging<LamashareApi.Database.DB.Entities.LibraryEntity> filteredLibraries = await
             GetGridifyFilteredLibrariesAsync(queryable, searchQuery);
         List<LibraryDto> dtos = mapper.Map<List<LibraryDto>>(filteredLibraries);
 
         return new Paging<LibraryDto> { Data = dtos, Count = dtos.Count };
     }
 
-    private async Task<Paging<LamashareApi.Database.DB.Entities.Library>> GetGridifyFilteredLibrariesAsync(IQueryable<LamashareApi.Database.DB.Entities.Library> queryable, GridifyQuery gridifyQuery)
+    private async Task<Paging<LamashareApi.Database.DB.Entities.LibraryEntity>> GetGridifyFilteredLibrariesAsync(IQueryable<LamashareApi.Database.DB.Entities.LibraryEntity> queryable, GridifyQuery gridifyQuery)
     {
         LibraryGridifyMapper gridifyMapper = new();
         return await queryable.GridifyAsync(gridifyQuery, gridifyMapper);

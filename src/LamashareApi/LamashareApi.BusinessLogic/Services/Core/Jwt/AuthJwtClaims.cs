@@ -18,12 +18,12 @@ public class AuthJwtClaims
         };
     }
 
-    public static AuthJwtClaims FromUser(User user)
+    public static AuthJwtClaims FromUser(UserEntity userEntity)
     {
         return new()
         {
-            UserId = user.Id,
-            Role = user.Role
+            UserId = userEntity.Id,
+            Role = userEntity.Role
         };
     }
 

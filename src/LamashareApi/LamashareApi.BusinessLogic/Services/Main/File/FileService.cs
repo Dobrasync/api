@@ -7,6 +7,7 @@ using LamashareApi.Database.Enums;
 using LamashareApi.Database.Repos;
 using LamashareApi.Shared.Constants;
 using LamashareApi.Shared.Exceptions.UserspaceException;
+using LamashareApi.Shared.Exceptions.UserspaceException.Block;
 using LamashareCore.Models;
 using LamashareCore.Util;
 using Microsoft.AspNetCore.DataProtection.Repositories;
@@ -22,7 +23,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     public async Task<FileChecksumDto> GetTotalChecksum(Guid libraryId, string libraryFilePath)
     {
         #region Load library
-        LamashareApi.Database.DB.Entities.Library lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
+        LamashareApi.Database.DB.Entities.LibraryEntity lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
         #endregion
         #region Generate checksum
 
@@ -41,8 +42,8 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     public async Task<FileInfoDto> GetFileInfo(Guid libraryId, string libraryFilePath)
     {
         #region load lib and file
-        LamashareApi.Database.DB.Entities.Library lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
-        LamashareApi.Database.DB.Entities.File? file = await repoWrap.FileRepo.QueryAll().FirstOrDefaultAsync(x => x.FileLibraryPath == libraryFilePath);
+        LamashareApi.Database.DB.Entities.LibraryEntity lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
+        LamashareApi.Database.DB.Entities.FileEntity? file = await repoWrap.FileRepo.QueryAll().FirstOrDefaultAsync(x => x.FileLibraryPath == libraryFilePath);
         if (file == null) throw new NotFoundUSException();
         #endregion
         #region generate info
@@ -95,19 +96,22 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     #region GET - Pull block
     public async Task<BlockDto> PullBlock(string blockChecksum)
     {
-        #region load block
-        var blockEntity = await repoWrap.BlockRepo
+        #region Load file containing block
+        FileEntity? file = await repoWrap.FileRepo
             .QueryAll()
-            .Include(x => x.File)
-            .ThenInclude(x => x.Library)
-            .FirstOrDefaultAsync(x => x.Checksum == blockChecksum);
-        if (blockEntity == null || blockEntity.File == null || blockEntity.File.Library == null)
+            .Include(x => x.Blocks)
+            .Include(x => x.Library)
+            .FirstOrDefaultAsync(x => x.Blocks.Exists(y => y.Checksum == blockChecksum));
+
+        if (file == null)
         {
             throw new NotFoundUSException();
         }
+        
+        BlockEntity blockEntity = file.Blocks.First(x => x.Checksum == blockChecksum);
         #endregion
-        #region Load block from file
-        string syspath = Path.Join(LibraryUtil.GetLibraryDirectory(blockEntity.File.Library.Id, apps.GetAppsettings().Storage.LibraryLocation), blockEntity.File.FileLibraryPath);
+        #region Load block content from file
+        string syspath = Path.Join(LibraryUtil.GetLibraryDirectory(file.Library.Id, apps.GetAppsettings().Storage.LibraryLocation), file.FileLibraryPath);
         byte[] block = await FileUtil.GetFileBlock(blockChecksum, syspath, blockEntity.Size, blockEntity.Offset);
         #endregion
 
@@ -161,7 +165,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         
         #region create transaction db entity
         var creationDateTime = DateTime.UtcNow;
-        var newTransaction = new FileTransaction()
+        var newTransaction = new FileTransactionEntity()
         {
             File = existingFile,
             Status = EFileTransactionStatus.INCOMPLETE,
@@ -186,24 +190,30 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             var blocks = FileUtil.GetFileBlocks(Path.Join(LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation), existingFile.FileLibraryPath));
             await WriteTempBlockRange(blocks);
         }
-        else
+        else if (createDto.Type == EFileTransactionType.PUSH)
         {
-            var existingBlocks = await repoWrap.BlockRepo.QueryAll()
-                .Include(x => x.File)
-                .Where(x => createDto.BlockChecksums.Contains(x.Checksum) && !(hasFileJustBeenCreated && x.File == existingFile))
+            if (createDto.BlockChecksums == null) throw new ArgumentException("BlockChecksums cannot be null.");
+            
+            List<FileEntity> filesContainingRequiredBlocks = await repoWrap.FileRepo
+                .QueryAll()
+                .Include(x => x.Blocks)
+                .Where(x => x.Blocks.Exists(y => createDto.BlockChecksums!.Contains(y.Checksum)) && !(hasFileJustBeenCreated && x == existingFile))
                 .ToListAsync();
-
-            foreach (var block in existingBlocks)
+            
+            List<BlockEntity> blocksOnly = filesContainingRequiredBlocks.SelectMany(x => x.Blocks).Distinct().ToList();
+            List<BlockEntity> requiredBlocksOnly = blocksOnly.Where(x => createDto.BlockChecksums!.Contains(x.Checksum)).ToList();
+            
+            foreach (var block in requiredBlocksOnly)
             {
                 string libSysPath = LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation);
-                string fileSysPath = FileUtil.FileLibPathToSysPath(libSysPath, block.File.FileLibraryPath);
+                string fileSysPath = FileUtil.FileLibPathToSysPath(libSysPath, block.Files.First().FileLibraryPath);
                 var blockContent = await FileUtil.GetFileBlock(block.Checksum, fileSysPath, block.Size, block.Offset);
                 await WriteTempBlock(block.Checksum, blockContent);
             }
 
             foreach (var blockOnClient in createDto.BlockChecksums)
             {
-                if (!existingBlocks.Select(x => x.Checksum).Contains(blockOnClient))
+                if (!requiredBlocksOnly.Select(x => x.Checksum).Contains(blockOnClient))
                 {
                     blocksRequiredByRemoteOnPush.Add(blockOnClient);
                 }
@@ -232,6 +242,8 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             .Include(x => x.File)
             .ThenInclude(x => x.Library)
             .FirstOrDefaultAsync(x => x.Id == transactionId);
+        #endregion 
+        #region checks
         if (transaction == null)
         {
             throw new NotFoundUSException();
@@ -241,55 +253,21 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         {
             throw new TransactionAlreadyCompleteUSException();
         }
-
-        var file = transaction.File;
-        #endregion 
-        
-        #region checks
         if (transaction.Type == EFileTransactionType.PUSH 
             && (transaction.RequiredBlocks!.Count != transaction.ReceivedBlocks!.Count || transaction.RequiredBlocks.Except(transaction.ReceivedBlocks).Any()))
         {
             throw new TransactionBlockMismatchUSException();
         }
-
-        string libpath = LibraryUtil.GetLibraryDirectory(transaction.File.Library.Id,
-            apps.GetAppsettings().Storage.LibraryLocation);
         #endregion
         
-        #region finalize push transaction specific stuff
+        #region Finalize PUSH
         if (transaction.Type == EFileTransactionType.PUSH)
         {
-            string fileSysPath = Path.Join(libpath, file.FileLibraryPath);
-            #region write combined blocks to disk
-            // Skip combination if no blocks were expected (empty file creation)
-            if (transaction.TotalBlocks.Any())
-            {
-                await CombineAndDiscardTempBlocks(transaction.File.Library.Id, fileSysPath, transaction.TotalBlocks!, transaction.File.DateModified, transaction.File.DateCreated);
-            }
-            else
-            {
-                await FileUtil.FullRestoreFileFromBlocks(new(), fileSysPath, transaction.File.DateCreated,
-                    transaction.File.DateModified);
-            }
-            #endregion
-            
-            
-            string assembledFileChecksum = await FileUtil.GetFileTotalChecksumAsync(fileSysPath);
-            //if (transaction.ExpectedChecksum != assembledFileChecksum)
-            //{
-            //    throw new TransactionChecksumMismatchUSException();
-            //}
-        
-            #region Update file db entity
-            file.TotalChecksum = assembledFileChecksum;
-            file.DateCreated = transaction.DateCreatedFile;
-            file.DateModified = transaction.DateModifiedFile;
-            await repoWrap.FileRepo.UpdateAsync(file);
-            #endregion
+            await FinalizePushTransaction(transaction);
         }
         #endregion
-        
-        #region update transaction db entity
+        #region Update transaction db entity
+        transaction.DateModified = DateTimeOffset.UtcNow;
         transaction.Status = EFileTransactionStatus.COMPLETE;
         await repoWrap.FileTransactionRepo.UpdateAsync(transaction);
         #endregion
@@ -298,6 +276,53 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         {
             Success = true
         };
+    }
+
+    private async Task FinalizePushTransaction(FileTransactionEntity transaction)
+    {
+        #region vars
+        string libpath = LibraryUtil.GetLibraryDirectory(transaction.File.Library.Id,
+            apps.GetAppsettings().Storage.LibraryLocation);
+        var file = transaction.File;
+        string fileSysPath = Path.Join(libpath, file.FileLibraryPath);
+        #endregion
+        #region checks
+        if (transaction.TotalBlocks == null)
+        {
+            throw new ArgumentException("TotalBlocks must not be null.");
+        }
+        #endregion
+        
+        #region Combine blocks / Create file on file system
+        // Skip combination if no blocks were expected (empty file creation)
+        if (transaction.TotalBlocks.Any())
+        {
+            await CombineAndDiscardTempBlocks(transaction.File.Library.Id, fileSysPath, transaction.TotalBlocks!, transaction.File.DateModified, transaction.File.DateCreated);
+        }
+        else
+        {
+            await FileUtil.FullRestoreFileFromBlocks(new(), fileSysPath, transaction.File.DateCreated,
+                transaction.File.DateModified);
+        }
+        #endregion
+        
+        #region Update file db entity
+        string assembledFileChecksum = await FileUtil.GetFileTotalChecksumAsync(fileSysPath);
+        
+        file.TotalChecksum = assembledFileChecksum;
+        file.DateCreated = transaction.DateCreatedFile;
+        file.DateModified = transaction.DateModifiedFile;
+        await repoWrap.FileRepo.UpdateAsync(file);
+        #endregion
+        #region Update used blocks to include this file as source
+        List<BlockEntity> blocksToUpdate = await repoWrap.BlockRepo
+            .QueryAll()
+            .Where(x => x.Library == transaction.File.Library && transaction.TotalBlocks.Contains(x.Checksum))
+            .ToListAsync();
+        
+        blocksToUpdate.ForEach(x => x.Files.Add(file));
+        await repoWrap.BlockRepo.UpdateRangeAsync(blocksToUpdate);
+        #endregion
     }
     #endregion
     #region POST - Push block
@@ -308,6 +333,17 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             .QueryAll()
             .Include(x => x.File)
             .FirstOrDefaultAsync(x => x.Id == blockDto.TransactionId);
+        #endregion
+        #region Check if block already exists
+        BlockEntity? existingBlock = await repoWrap.BlockRepo
+            .QueryAll()
+            .FirstOrDefaultAsync(x => x.Checksum == blockDto.Checksum);
+
+        if (existingBlock != null)
+        {
+            throw new BlockPushDuplicateUSException();
+        }
+        
         var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(blockDto.LibraryId);
         if (transaction == null)
         {
@@ -329,13 +365,14 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         
         await repoWrap.BlockRepo.InsertAsync(new()
         {
-            File = transaction.File,
+            Files = [transaction.File],
             Checksum = blockDto.Checksum,
             Library = lib,
             Offset = blockDto.Offset,
             Size = blockDto.Size,
         });
         transaction.ReceivedBlocks.Add(blockDto.Checksum);
+        transaction.DateModified = DateTimeOffset.UtcNow;
         await repoWrap.FileTransactionRepo.UpdateAsync(transaction);
 
         return new StatusDto()
@@ -410,11 +447,39 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
     public async Task DeleteFile(Guid libraryId, string libraryFilePath)
     {
         #region load required data
-        LamashareApi.Database.DB.Entities.Library lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
+        LamashareApi.Database.DB.Entities.LibraryEntity lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
         string libPath = LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation);
         string fileSysPath = FileUtil.FileLibPathToSysPath(libPath, libraryFilePath);
         #endregion
-
+        
+        #region Get file to delete from db
+        LamashareApi.Database.DB.Entities.FileEntity dbFileEntity = await repoWrap
+            .FileRepo
+            .QueryAll()
+            .Include(x => x.Blocks)
+            .ThenInclude(x => x.Files)
+            .FirstAsync(x => x.Library == lib && x.FileLibraryPath == libraryFilePath);
+        #endregion
+        
+        #region Delete orphan blocks from db
+        // delete blocks from db that are only present in the just deleted file
+        List<BlockEntity> blocksToDelete = dbFileEntity.Blocks
+            .Where(x => x.Files.Count() == 1)
+            .ToList();
+        await repoWrap.BlockRepo.DeleteRangeAsync(blocksToDelete);
+        #endregion
+        #region Update remaining blocks file list
+        List<BlockEntity> blocksToUpdate = dbFileEntity.Blocks
+            .Where(x => x.Files.Count() > 1)
+            .ToList();
+        
+        blocksToUpdate.ForEach(x => x.Files.Remove(dbFileEntity));
+        await repoWrap.BlockRepo.UpdateRangeAsync(blocksToUpdate);
+        #endregion
+        
+        #region Drop file from db
+        await repoWrap.FileRepo.DeleteAsync(dbFileEntity);
+        #endregion
         #region Delete file from FS
         if (global::System.IO.File.Exists(fileSysPath))
         {
@@ -424,25 +489,6 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         {
             throw new NotFoundUSException();
         }
-        #endregion
-        #region Delete file from db
-        LamashareApi.Database.DB.Entities.File dbFile = await repoWrap
-            .FileRepo
-            .QueryAll()
-            .Include(x => x.Blocks)
-            .FirstAsync(x => x.Library == lib && x.FileLibraryPath == libraryFilePath);
-
-        List<string> blockChecksums = dbFile.Blocks.Select(x => x.Checksum).ToList();
-        #endregion
-        
-        #region Delete blocks from db
-        List<LamashareApi.Database.DB.Entities.Block> toDelete = await repoWrap.BlockRepo
-            .QueryAll()
-            .Include(x => x.File)
-            .Where(x => x.File == dbFile)
-            .ToListAsync();
-
-        await repoWrap.BlockRepo.DeleteRangeAsync(toDelete);
         #endregion
     }
     #endregion

@@ -3,14 +3,12 @@ using LamashareApi.Database.Const;
 
 namespace LamashareApi.Database.DB.Entities;
 
-public class File : BaseEntity
+public class FileEntity : BaseEntity
 {
-    public Guid Id { get; set; }
-    
     [MinLength(LengthConstraints.TotalChecksumLength), MaxLength(LengthConstraints.TotalChecksumLength)] 
     public string TotalChecksum { get; set; } = default!;
     
-    public Library Library { get; set; } = default!;
+    public LibraryEntity Library { get; set; } = default!;
     
     [MinLength(LengthConstraints.FileLibraryPathMinLength), MaxLength(LengthConstraints.FileLibraryPathMaxLength)] 
     public string FileLibraryPath { get; set; } = default!;
@@ -19,7 +17,7 @@ public class File : BaseEntity
     
     public DateTimeOffset DateCreated { get; set; }
     
-    public List<FileTransaction> FileTransactions { get; set; } = new();
+    public List<FileTransactionEntity> FileTransactions { get; set; } = new();
     
-    public List<Block> Blocks { get; set; } = new();
+    public List<BlockEntity> Blocks { get; set; } = new();
 }

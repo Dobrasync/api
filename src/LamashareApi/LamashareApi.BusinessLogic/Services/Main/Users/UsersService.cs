@@ -23,9 +23,9 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
 {
     public async Task<UserDto> CreateUser(UserCreateDto cdto)
     {
-        User newEntity = mapper.Map<User>(cdto);
+        UserEntity newEntity = mapper.Map<UserEntity>(cdto);
         
-        User inserted = await repoWrap.UserRepo.InsertAsync(newEntity);
+        UserEntity inserted = await repoWrap.UserRepo.InsertAsync(newEntity);
         return mapper.Map<UserDto>(inserted);
     }
     
@@ -34,7 +34,7 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
         if (!await IsUsernameAvailable(rdto.Username))
             throw new UsernameTakenUSException();
         
-        User newUser = new()
+        UserEntity newUserEntity = new()
         {
             Username = rdto.Username,
             Password = SecretHasher.Hash(rdto.Password),
@@ -44,17 +44,17 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
         // The first registered user should get superadmin rights
         if (await repoWrap.UserRepo.QueryAll().CountAsync() == 0)
         {
-            newUser.Role = EUserRole.SUPERADMIN;
+            newUserEntity.Role = EUserRole.SUPERADMIN;
         }
         #endregion
         
-        await repoWrap.UserRepo.InsertAsync(newUser);
-        return authService.MakeAuthDto(AuthJwtClaims.FromUser(newUser));
+        await repoWrap.UserRepo.InsertAsync(newUserEntity);
+        return authService.MakeAuthDto(AuthJwtClaims.FromUser(newUserEntity));
     }
 
     public async Task<bool> IsUsernameAvailable(string username)
     {
-        User? user = await repoWrap.UserRepo.QueryAll()
+        UserEntity? user = await repoWrap.UserRepo.QueryAll()
             .FirstOrDefaultAsync(x => x.Username.ToLower() == username.ToLower());
 
         return user == null;
@@ -67,7 +67,7 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
     
     public Task<Paging<LibraryDto>> GetAllLibrariesByUser(Guid userId, GridifyQuery gridifyQuery)
     {
-        IQueryable<LamashareApi.Database.DB.Entities.Library> query = repoWrap
+        IQueryable<LamashareApi.Database.DB.Entities.LibraryEntity> query = repoWrap
             .UserRepo
             .QueryAll()
             .Include(x => x.Libraries)
@@ -79,21 +79,21 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
 
     public async Task<LibraryDto> CreateUserLibrary(Guid userId, LibraryCreateDto dto)
     {
-        User user = await FindUserByIdAsyncThrows(userId);
+        UserEntity userEntity = await FindUserByIdAsyncThrows(userId);
         
-        LamashareApi.Database.DB.Entities.Library library = mapper.Map<LamashareApi.Database.DB.Entities.Library>(dto);
-        await repoWrap.LibraryRepo.InsertAsync(library);
+        LamashareApi.Database.DB.Entities.LibraryEntity libraryEntity = mapper.Map<LamashareApi.Database.DB.Entities.LibraryEntity>(dto);
+        await repoWrap.LibraryRepo.InsertAsync(libraryEntity);
         
-        user.Libraries.Add(library);
-        await repoWrap.UserRepo.UpdateAsync(user);
+        userEntity.Libraries.Add(libraryEntity);
+        await repoWrap.UserRepo.UpdateAsync(userEntity);
         
-        return mapper.Map<LibraryDto>(library);
+        return mapper.Map<LibraryDto>(libraryEntity);
     }
     
     #region Util
-    private async Task<User> FindUserByIdAsyncThrows(Guid id)
+    private async Task<UserEntity> FindUserByIdAsyncThrows(Guid id)
     {
-        User? found = await repoWrap.UserRepo.QueryAll().Include(x => x.Libraries).FirstOrDefaultAsync(x => x.Id == id);
+        UserEntity? found = await repoWrap.UserRepo.QueryAll().Include(x => x.Libraries).FirstOrDefaultAsync(x => x.Id == id);
         if (found == null) throw new NotFoundUSException();
 
         return found;
@@ -102,16 +102,16 @@ public class UsersService(IMapper mapper, IRepoWrapper repoWrap, ILocalizationSe
     
     #region pagination
 
-    private async Task<Paging<LibraryDto>> PaginateLibrary(IQueryable<LamashareApi.Database.DB.Entities.Library> queryable, GridifyQuery searchQuery)
+    private async Task<Paging<LibraryDto>> PaginateLibrary(IQueryable<LamashareApi.Database.DB.Entities.LibraryEntity> queryable, GridifyQuery searchQuery)
     {
-        Paging<LamashareApi.Database.DB.Entities.Library> filteredLibraries = await
+        Paging<LamashareApi.Database.DB.Entities.LibraryEntity> filteredLibraries = await
             GetGridifyFilteredLibrariesAsync(queryable, searchQuery);
         List<LibraryDto> dtos = mapper.Map<List<LibraryDto>>(filteredLibraries.Data);
 
         return new Paging<LibraryDto> { Data = dtos, Count = dtos.Count };
     }
 
-    private async Task<Paging<LamashareApi.Database.DB.Entities.Library>> GetGridifyFilteredLibrariesAsync(IQueryable<LamashareApi.Database.DB.Entities.Library> queryable, GridifyQuery gridifyQuery)
+    private async Task<Paging<LamashareApi.Database.DB.Entities.LibraryEntity>> GetGridifyFilteredLibrariesAsync(IQueryable<LamashareApi.Database.DB.Entities.LibraryEntity> queryable, GridifyQuery gridifyQuery)
     {
         LibraryGridifyMapper gridifyMapper = new();
         return await queryable.GridifyAsync(gridifyQuery, gridifyMapper);
