@@ -1,4 +1,5 @@
 using Lamashare.BusinessLogic.Dtos.File;
+using LamashareApi.Database.DB.Entities.Base;
 using LamashareApi.Database.Enums;
 
 namespace LamashareApi.Database.DB.Entities;

@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using LamashareApi.Database.Const;
+using LamashareApi.Database.DB.Entities.Base;
 
 namespace LamashareApi.Database.DB.Entities;
 
 public class BlockEntity : BaseEntity
-{
+{    
     [MinLength(LengthConstraints.BlockChecksumLength), MaxLength(LengthConstraints.BlockChecksumLength)]
     public string Checksum { get; set; } = default!;
-    
-    public List<FileEntity> Files { get; set; } = new();
+
+    public HashSet<FileEntity> Files { get; set; } = default!;
     
     public long Offset { get; set; }
     
