@@ -10,7 +10,7 @@ public class BlockEntity : BaseEntity
     [MinLength(LengthConstraints.BlockChecksumLength), MaxLength(LengthConstraints.BlockChecksumLength)]
     public string Checksum { get; set; } = default!;
 
-    public HashSet<FileEntity> Files { get; set; } = default!;
+    public HashSet<FileEntity> Files { get; set; } = new();
     
     public long Offset { get; set; }
     
