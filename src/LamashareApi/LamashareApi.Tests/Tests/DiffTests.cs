@@ -1,3 +1,4 @@
+using Lamashare.BusinessLogic.Dtos.File;
 using Lamashare.BusinessLogic.Services.Main.File;
 using Lamashare.BusinessLogic.Services.Main.Library;
 using LamashareApi.Tests.Fixtures;
@@ -17,42 +18,44 @@ public class DiffTests : IClassFixture<GenericTestFixture>
         fileService = fixture.ServiceProvider.GetRequiredService<IFileService>();
         libraryService = fixture.ServiceProvider.GetRequiredService<ILibraryService>();
     }
-    
+
     [Fact]
     public async Task GetFileDiff()
     {
-        string localFilePath = "Resources/pushtest.txt";
+        var localFilePath = "Resources/pushtest.txt";
         var localFileInfo = new FileInfo(localFilePath);
         var localTotalChecksum = await FileUtil.GetFileTotalChecksumAsync(localFilePath);
-        var diff = await fileService.CreateLibraryDiff(new()
+        var diff = await fileService.CreateLibraryDiff(new CreateDiffDto
         {
             LibraryId = GenericTestFixture.LibraryId,
-            FilesOnLocal = [new()
-            {
-                LibraryId = GenericTestFixture.LibraryId,
-                DateCreated = localFileInfo.CreationTimeUtc,
-                DateModified = localFileInfo.LastWriteTimeUtc,
-                TotalChecksum = localTotalChecksum,
-                FileLibraryPath = localFilePath,
-            }],
+            FilesOnLocal =
+            [
+                new FileInfoDto
+                {
+                    LibraryId = GenericTestFixture.LibraryId,
+                    DateCreated = localFileInfo.CreationTimeUtc,
+                    DateModified = localFileInfo.LastWriteTimeUtc,
+                    TotalChecksum = localTotalChecksum,
+                    FileLibraryPath = localFilePath
+                }
+            ]
         });
-        
+
         Assert.Single(diff.RequiredByLocal);
         Assert.Single(diff.RequiredByRemote);
     }
-    
+
     [Fact]
     public async Task GetFileDiffNoLocalFiles()
     {
-        var diff = await fileService.CreateLibraryDiff(new()
+        var diff = await fileService.CreateLibraryDiff(new CreateDiffDto
         {
             LibraryId = GenericTestFixture.LibraryId,
-            FilesOnLocal = [],
+            FilesOnLocal = []
         });
-        
+
         Assert.Empty(diff.RequiredByRemote);
         Assert.Single(diff.RequiredByLocal);
         Assert.NotNull(diff.RequiredByLocal.FirstOrDefault(x => x == GenericTestFixture.TestFilePath));
     }
-
 }

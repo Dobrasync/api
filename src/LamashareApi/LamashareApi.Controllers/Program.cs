@@ -2,29 +2,23 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
-using Lamashare.BusinessLogic.Mapper;
 using Lamashare.BusinessLogic.Mapper.AutoMapper;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using Lamashare.BusinessLogic.Services.Core.Jwt;
 using Lamashare.BusinessLogic.Services.Core.Localization;
 using Lamashare.BusinessLogic.Services.Main.Auth;
 using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.InvokerService;
 using Lamashare.BusinessLogic.Services.Main.Library;
 using Lamashare.BusinessLogic.Services.Main.System;
 using Lamashare.BusinessLogic.Services.Main.SystemSettings;
-using Lamashare.BusinessLogic.Services.Main.Users;
 using LamashareApi.Database.DB;
 using LamashareApi.Database.Repos;
 using LamashareApi.Middleware.ExceptionInteceptor;
 using LamashareApi.Shared.Appsettings;
-using Microsoft.AspNetCore.Identity;
+using LamashareApi.Shared.Auth;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Zitadel.Authentication;
-using Zitadel.Credentials;
 using Zitadel.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,7 +45,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo() { Title = "Lamashare API", Version = "v1" });
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Lamashare API", Version = "v1" });
     opt.EnableAnnotations();
 });
 
@@ -91,10 +85,7 @@ builder.Services.AddApiVersioning(opt =>
     opt.AssumeDefaultVersionWhenUnspecified = true;
     opt.ApiVersionReader = new UrlSegmentApiVersionReader();
     opt.UnsupportedApiVersionStatusCode = 404;
-}).AddMvc(opt =>
-{
-    opt.Conventions.Add(new VersionByNamespaceConvention());
-}).AddApiExplorer(opt =>
+}).AddMvc(opt => { opt.Conventions.Add(new VersionByNamespaceConvention()); }).AddApiExplorer(opt =>
 {
     opt.GroupNameFormat = "'v'VVV";
     opt.SubstituteApiVersionInUrl = true;
@@ -108,6 +99,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
 #endregion
 
 #region Automapper
@@ -121,31 +113,11 @@ builder.Services.AddAutoMapper(cfg => { cfg.AddProfile<MappingProfile>(); });
 builder.Services
     .AddAuthorization()
     .AddAuthentication()
-    .AddZitadelIntrospection(
-        "ZITADEL_JWT", o =>
-        {
-            o.Authority = appsettings.Auth.Idp.Authority;
-            o.JwtProfile = Application.LoadFromJsonString(
-                $@"
-                    {{
-                      ""type"": ""application"",
-                      ""keyId"": ""{appsettings.Auth.Idp.KeyId}"",
-                      ""key"": ""{appsettings.Auth.Idp.Key}"",
-                      ""appId"": ""{appsettings.Auth.Idp.AppId}"",
-                      ""clientId"": ""{appsettings.Auth.Idp.ClientId}""
-                    }}
-                ");
-
-        })
-    .AddZitadelIntrospection("ZITADEL_BASIC", o =>
+    .AddZitadelIntrospection(AuthSchemes.Basic, o =>
     {
         o.Authority = appsettings.Auth.Idp.Authority;
-        o.ClientId = appsettings.Auth.Idp.ClientId;
-        o.ClientSecret = appsettings.Auth.Idp.ClientSecret;
-    })
-    .AddZitadelFake("ZITADEL_FAKE", o =>
-    {
-        o.FakeZitadelId = "1337";
+        o.ClientId = appsettings.Auth.Idp.Api.ClientId;
+        o.ClientSecret = appsettings.Auth.Idp.Api.ClientSecret;
     });
 
 builder.Services.AddHttpContextAccessor();
@@ -159,29 +131,27 @@ builder.Services.AddDbContext<LamashareContext>(opt =>
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
 builder.Services.AddScoped<IFileService, FileService>();
-builder.Services.AddScoped<IUsersService, UsersService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IInvokerService, InvokerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISystemSettingsService, SystemSettingsService>();
 
 #endregion
 
 #region Cors
+
 builder.Services.AddCors();
+
 #endregion
 
 var app = builder.Build();
 
 #region DevSwagger
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(config =>
-    {
-        config.SwaggerEndpoint("/swagger/v1/swagger.json", "Lamashare API");
-    });
+    app.UseSwaggerUI(config => { config.SwaggerEndpoint("/swagger/v1/swagger.json", "Lamashare API"); });
 }
+
 #endregion
 
 #region HTTPS Redirect
@@ -191,7 +161,9 @@ app.UseHttpsRedirection();
 #endregion
 
 #region Controllers
+
 app.MapControllers();
+
 #endregion
 
 #region Cors
@@ -203,6 +175,7 @@ app.UseCors(opt =>
         .AllowCredentials()
         .WithOrigins(appsettings.Core.CorsOrigins);
 });
+
 #endregion
 
 #region Local
@@ -219,11 +192,13 @@ app.UseMiddleware<ExceptionInterceptor>();
 #endregion
 
 #region Auth
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 #endregion
 
-using(var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<LamashareContext>();
     // use context

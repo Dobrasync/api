@@ -4,6 +4,5 @@ namespace LamashareApi.Shared.Appsettings.System;
 
 public class CoreAS
 {
-    [Required]
-    public string[] CorsOrigins { get; set; } = default!;
+    [Required] public string[] CorsOrigins { get; set; } = default!;
 }

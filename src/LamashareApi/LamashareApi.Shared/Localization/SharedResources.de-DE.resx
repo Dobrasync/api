@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
                 xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
 
@@ -27,9 +28,9 @@
         <value>Ein deutscher Debug-String.</value>
     </data>
     <data name="exception.usernameTaken" xml:space="preserve">
-        <value />
+        <value/>
     </data>
     <data name="exception.notFound" xml:space="preserve">
-        <value />
+        <value/>
     </data>
 </root>

@@ -1,5 +1,8 @@
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using LamashareApi.Shared.Appsettings;
+using LamashareApi.Shared.Appsettings.Auth;
+using LamashareApi.Shared.Appsettings.Storage;
+using LamashareApi.Shared.Appsettings.System;
 
 namespace LamashareApi.Tests.Mock;
 
@@ -7,38 +10,36 @@ public class MockAppsettingsProvider : IAppsettingsProvider
 {
     public Appsettings GetAppsettings()
     {
-        return new()
+        return new Appsettings
         {
             Auth =
-            new() {
-                AuthJwt = new() {
-                    Audience = "test",
-                    Issuer = "test",
-                    Secret = "test",
-                    LifetimeMinutes = 3600,
-                },
-                Idp = new()
+                new AuthAS
                 {
-                    Device = new()
+                    Idp = new IdpAS
                     {
-                        ClientId = "",
-                    },
-                    Authority = string.Empty,
-                    Web = new()
-                    {
-                        ClientId = ""
+                        Device = new DeviceAS
+                        {
+                            ClientId = ""
+                        },
+                        Authority = string.Empty,
+                        Api = new ApiAS
+                        {
+                            ClientId = "",
+                            ClientSecret = ""
+                        }
                     }
-                }
-            },
+                },
             Core =
-            new() {
-                CorsOrigins = ["test"]
-            },
+                new CoreAS
+                {
+                    CorsOrigins = ["test"]
+                },
             Storage =
-            new() {
-                LibraryLocation = "./serverlibs",
-                TempBlockLocation = "./tempblocks",
-            }
+                new StorageAS
+                {
+                    LibraryLocation = "./serverlibs",
+                    TempBlockLocation = "./tempblocks"
+                }
         };
     }
 }

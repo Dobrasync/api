@@ -9,26 +9,26 @@ namespace LamashareApi.Shared.Appsettings;
 public class Appsettings
 {
     /// <summary>
-    /// Core configuration.
+    ///     Core configuration.
     /// </summary>
-    [Required] 
+    [Required]
     public CoreAS Core { get; set; } = default!;
-    
+
     /// <summary>
-    /// Authentication configuration
+    ///     Authentication configuration
     /// </summary>
     [Required]
     public AuthAS Auth { get; set; } = default!;
-    
+
     /// <summary>
-    /// Storage configuration.
+    ///     Storage configuration.
     /// </summary>
     [Required]
     public StorageAS Storage { get; set; } = default!;
 
     /// <summary>
-    /// Settings related to sync logic.
+    ///     Settings related to sync logic.
     /// </summary>
-    [Required] 
+    [Required]
     public SyncAS Sync { get; set; } = default!;
 }

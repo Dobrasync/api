@@ -6,7 +6,7 @@ namespace LamashareApi.Shared.Appsettings.Sync;
 public class SyncAS
 {
     /// <summary>
-    /// Settings related to file transactions.
+    ///     Settings related to file transactions.
     /// </summary>
     [Required]
     public TransactionAS Transaction { get; set; } = default!;

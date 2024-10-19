@@ -12,10 +12,10 @@ namespace LamashareApi.Tests.Tests;
 [Collection("Sync")]
 public class DeleteTests : IClassFixture<GenericTestFixture>
 {
+    private readonly IAppsettingsProvider apps;
     private readonly IFileService fileService;
     private readonly ILibraryService libraryService;
     private readonly IRepoWrapper repoWrap;
-    private readonly IAppsettingsProvider apps;
 
     public DeleteTests(GenericTestFixture fixture)
     {
@@ -24,20 +24,19 @@ public class DeleteTests : IClassFixture<GenericTestFixture>
         repoWrap = fixture.ServiceProvider.GetRequiredService<IRepoWrapper>();
         apps = fixture.ServiceProvider.GetRequiredService<IAppsettingsProvider>();
     }
-    
+
     [Fact]
     public async Task DeleteFile()
     {
         await fileService.DeleteFile(GenericTestFixture.LibraryId, GenericTestFixture.TestFilePath);
 
-        string libPath = LibraryUtil.GetLibraryDirectory(GenericTestFixture.LibraryId,
+        var libPath = LibraryUtil.GetLibraryDirectory(GenericTestFixture.LibraryId,
             apps.GetAppsettings().Storage.LibraryLocation);
 
-        bool fileStillExistsInFileSystem =
+        var fileStillExistsInFileSystem =
             File.Exists(FileUtil.FileLibPathToSysPath(libPath, GenericTestFixture.TestFilePath));
-        
-        Assert.False(fileStillExistsInFileSystem);
-        Assert.Equal(0, repoWrap.BlockRepo.QueryAll().Count()); 
-    }
 
+        Assert.False(fileStillExistsInFileSystem);
+        Assert.Equal(0, repoWrap.BlockRepo.QueryAll().Count());
+    }
 }

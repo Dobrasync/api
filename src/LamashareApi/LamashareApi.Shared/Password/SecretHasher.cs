@@ -7,14 +7,14 @@ public static class SecretHasher
     private const int SaltSize = 16; // 128 bits
     private const int KeySize = 32; // 256 bits
     private const int Iterations = 50000;
-    private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA256;
 
     private const char SegmentDelimiter = ':';
+    private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA256;
 
     public static string Hash(string input)
     {
-        byte[] salt = RandomNumberGenerator.GetBytes(SaltSize);
-        byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
+        var salt = RandomNumberGenerator.GetBytes(SaltSize);
+        var hash = Rfc2898DeriveBytes.Pbkdf2(
             input,
             salt,
             Iterations,
@@ -32,12 +32,12 @@ public static class SecretHasher
 
     public static bool Verify(string input, string hashString)
     {
-        string[] segments = hashString.Split(SegmentDelimiter);
-        byte[] hash = Convert.FromHexString(segments[0]);
-        byte[] salt = Convert.FromHexString(segments[1]);
-        int iterations = int.Parse(segments[2]);
-        HashAlgorithmName algorithm = new HashAlgorithmName(segments[3]);
-        byte[] inputHash = Rfc2898DeriveBytes.Pbkdf2(
+        var segments = hashString.Split(SegmentDelimiter);
+        var hash = Convert.FromHexString(segments[0]);
+        var salt = Convert.FromHexString(segments[1]);
+        var iterations = int.Parse(segments[2]);
+        var algorithm = new HashAlgorithmName(segments[3]);
+        var inputHash = Rfc2898DeriveBytes.Pbkdf2(
             input,
             salt,
             iterations,
