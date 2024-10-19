@@ -6,4 +6,7 @@ public class AuthAS
 {
     [Required]
     public AuthJwtAS AuthJwt { get; set; } = default!;
+
+    [Required] 
+    public IdpAS Idp { get; set; } = default!;
 }

@@ -11,12 +11,23 @@ public class MockAppsettingsProvider : IAppsettingsProvider
         {
             Auth =
             new() {
-                AuthJwt =
-                new() {
+                AuthJwt = new() {
                     Audience = "test",
                     Issuer = "test",
                     Secret = "test",
                     LifetimeMinutes = 3600,
+                },
+                Idp = new()
+                {
+                    Device = new()
+                    {
+                        ClientId = "",
+                    },
+                    Authority = string.Empty,
+                    Web = new()
+                    {
+                        ClientId = ""
+                    }
                 }
             },
             Core =

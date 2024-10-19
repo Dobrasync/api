@@ -18,10 +18,14 @@ using LamashareApi.Database.DB;
 using LamashareApi.Database.Repos;
 using LamashareApi.Middleware.ExceptionInteceptor;
 using LamashareApi.Shared.Appsettings;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Zitadel.Authentication;
+using Zitadel.Credentials;
+using Zitadel.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -114,13 +118,43 @@ builder.Services.AddAutoMapper(cfg => { cfg.AddProfile<MappingProfile>(); });
 
 #region Services
 
+builder.Services
+    .AddAuthorization()
+    .AddAuthentication()
+    .AddZitadelIntrospection(
+        "ZITADEL_JWT", o =>
+        {
+            o.Authority = appsettings.Auth.Idp.Authority;
+            o.JwtProfile = Application.LoadFromJsonString(
+                $@"
+                    {{
+                      ""type"": ""application"",
+                      ""keyId"": ""{appsettings.Auth.Idp.KeyId}"",
+                      ""key"": ""{appsettings.Auth.Idp.Key}"",
+                      ""appId"": ""{appsettings.Auth.Idp.AppId}"",
+                      ""clientId"": ""{appsettings.Auth.Idp.ClientId}""
+                    }}
+                ");
+
+        })
+    .AddZitadelIntrospection("ZITADEL_BASIC", o =>
+    {
+        o.Authority = appsettings.Auth.Idp.Authority;
+        o.ClientId = appsettings.Auth.Idp.ClientId;
+        o.ClientSecret = appsettings.Auth.Idp.ClientSecret;
+    })
+    .AddZitadelFake("ZITADEL_FAKE", o =>
+    {
+        o.FakeZitadelId = "1337";
+    });
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IAppsettingsProvider, AppsettingsProvider>();
 builder.Services.AddScoped<ILocalizationService, LocalizationService>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddDbContext<LamashareContext>(opt =>
 {
-    opt.UseMySQL(builder.Configuration.GetConnectionString("MainDb"));
+    opt.UseMySQL(builder.Configuration.GetConnectionString("MainDb")!);
 });
 
 builder.Services.AddScoped<ILibraryService, LibraryService>();
@@ -182,6 +216,11 @@ app.UseRequestLocalization(localizeOptions!.Value);
 
 app.UseMiddleware<ExceptionInterceptor>();
 
+#endregion
+
+#region Auth
+app.UseAuthentication();
+app.UseAuthorization();
 #endregion
 
 using(var scope = app.Services.CreateScope())

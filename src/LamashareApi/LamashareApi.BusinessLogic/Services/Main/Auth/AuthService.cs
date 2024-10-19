@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using Lamashare.BusinessLogic.Dtos.Auth;
 using Lamashare.BusinessLogic.Dtos.User;
+using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using Lamashare.BusinessLogic.Services.Core.Jwt;
 using Lamashare.BusinessLogic.Services.Main.InvokerService;
 using LamashareApi.Database.DB.Entities;
@@ -12,8 +13,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lamashare.BusinessLogic.Services.Main.Auth;
 
-public class AuthService(IJwtService jwtService, IInvokerService invokerService, IRepoWrapper repoWrap, IMapper mapper) : IAuthService
+public class AuthService(IJwtService jwtService, IInvokerService invokerService, IRepoWrapper repoWrap, IMapper mapper, IAppsettingsProvider apps) : IAuthService
 {
+    public async Task<Sdto> Oidc(string code)
+    {
+        return new() {Content = ""};
+    }
+    
+    public async Task<Sdto> GetIdpDeviceClientId()
+    {
+        return new() { Content = apps.GetAppsettings().Auth.Idp.Device.ClientId };
+    }
+    
+    public async Task<Sdto> GetIdpUrl()
+    {
+        return new() { Content = apps.GetAppsettings().Auth.Idp.Authority };
+    }
+    
     public AuthDto MakeAuthDto(AuthJwtClaims claims)
     {
         (string jwtString, JwtSecurityToken token) = jwtService.GenerateAuthJwt(claims);
