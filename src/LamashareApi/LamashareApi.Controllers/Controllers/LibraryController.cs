@@ -1,7 +1,5 @@
 using System.Net.Mime;
-using Gridify;
 using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Dtos.User;
 using Lamashare.BusinessLogic.Services.Main.Library;
 using LamashareApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +20,7 @@ public class LibraryController(ILibraryService ls) : BaseController
     {
         return Ok(await ls.CreateLibrary(cdto));
     }
-    
+
     [HttpGet("{libraryId}")]
     [SwaggerOperation(
         Summary = "Get a library with given id",
@@ -34,7 +32,7 @@ public class LibraryController(ILibraryService ls) : BaseController
     {
         return Ok(await ls.GetLibraryById(libraryId));
     }
-    
+
     [HttpPut("{libraryId}")]
     [SwaggerOperation(
         Summary = "Update a library of given id",
@@ -46,7 +44,7 @@ public class LibraryController(ILibraryService ls) : BaseController
     {
         return Ok(await ls.UpdateLibrary(libraryId, udto));
     }
-    
+
     [HttpDelete("{libraryId}")]
     [SwaggerOperation(
         Summary = "Delete a library of given id",

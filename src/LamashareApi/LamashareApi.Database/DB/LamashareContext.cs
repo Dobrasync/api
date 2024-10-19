@@ -15,21 +15,21 @@ public class LamashareContext : DbContext
     public virtual DbSet<FileEntity> Files { get; set; }
     public virtual DbSet<UserEntity> Users { get; set; }
     public virtual DbSet<LibraryEntity> Libraries { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<UserEntity>()
             .HasIndex(e => e.Username)
             .IsUnique();
-        
+
         builder.Entity<FileEntity>()
             .HasIndex(e => e.FileLibraryPath)
             .IsUnique();
-        
+
         builder.Entity<BlockEntity>()
             .HasIndex(e => e.Checksum)
             .IsUnique();
-        
+
         builder.Entity<FileTransactionEntity>()
             .Property(e => e.TotalBlocks)
             .HasConversion(

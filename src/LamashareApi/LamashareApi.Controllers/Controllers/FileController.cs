@@ -1,7 +1,5 @@
-using System.Net.Mime;
 using Lamashare.BusinessLogic.Dtos.File;
 using Lamashare.BusinessLogic.Dtos.Generic;
-using Lamashare.BusinessLogic.Dtos.Library;
 using Lamashare.BusinessLogic.Services.Main.File;
 using LamashareApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +10,7 @@ namespace LamashareApi.Controllers;
 public class FileController(IFileService fileService) : BaseController
 {
     #region GET - File total checksum
+
     [HttpGet("total-checksum")]
     [SwaggerOperation(
         Summary = "Get file total checksum",
@@ -23,8 +22,11 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.GetTotalChecksum(libraryId, libraryFilePath));
     }
+
     #endregion
+
     #region GET - File info
+
     [HttpGet("info")]
     [SwaggerOperation(
         Summary = "Get file info",
@@ -36,12 +38,16 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.GetFileInfo(libraryId, libraryFilePath));
     }
+
     #endregion
+
     #region GET - File status
+
     [HttpGet("status")]
     [SwaggerOperation(
         Summary = "Get file status",
-        Description = "Retrieves a files status (e.g. if it is locked by another sync process). This is  more lean than getting the full file info which might not even be needed most of the time.",
+        Description =
+            "Retrieves a files status (e.g. if it is locked by another sync process). This is  more lean than getting the full file info which might not even be needed most of the time.",
         OperationId = nameof(GetFileStatus)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileStatusDto))]
@@ -49,8 +55,11 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.GetFileStatus(libraryId, libraryFilePath));
     }
+
     #endregion
+
     #region GET - Get block list
+
     [HttpGet("blocks")]
     [SwaggerOperation(
         Summary = "Get file block list",
@@ -62,8 +71,11 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.GetFileBlockList(libraryId, libraryFilePath));
     }
+
     #endregion
+
     #region GET - Get block
+
     [HttpGet("block")]
     [SwaggerOperation(
         Summary = "Pull a block",
@@ -75,12 +87,16 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.PullBlock(blockChecksum));
     }
+
     #endregion
+
     #region POST - Create file sync transaction
+
     [HttpPost("transactions")]
     [SwaggerOperation(
         Summary = "Create file transaction",
-        Description = "Creates a new file transaction. This locks the file and prevents other from writing to it as long as the transaction is running.",
+        Description =
+            "Creates a new file transaction. This locks the file and prevents other from writing to it as long as the transaction is running.",
         OperationId = nameof(CreateFileTransaction)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileTransactionDto))]
@@ -88,12 +104,16 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.CreateFileTransaction(createDto));
     }
+
     #endregion
+
     #region POST - Finish file sync transaction
+
     [HttpPost("transactions/finish")]
     [SwaggerOperation(
         Summary = "Finish file transaction",
-        Description = "Finishes a file transaction. This tells the API to run checks and unlock the file if everything went well.",
+        Description =
+            "Finishes a file transaction. This tells the API to run checks and unlock the file if everything went well.",
         OperationId = nameof(FinishFileTransaction)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(FileTransactionFinishDto))]
@@ -101,8 +121,11 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.FinishFileTransaction(transactionId));
     }
+
     #endregion
+
     #region POST - Push a block
+
     [HttpPost("block")]
     [SwaggerOperation(
         Summary = "Push a block",
@@ -114,8 +137,11 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.PushBlock(blockDto));
     }
+
     #endregion
+
     #region POST - Create diff list
+
     [HttpPost("diff")]
     [SwaggerOperation(
         Summary = "Get library diff",
@@ -127,8 +153,11 @@ public class FileController(IFileService fileService) : BaseController
     {
         return Ok(await fileService.CreateLibraryDiff(dto));
     }
+
     #endregion
+
     #region DELETE - Delete a file
+
     [HttpDelete("{libraryId}")]
     [SwaggerOperation(
         Summary = "Delete a file",
@@ -141,5 +170,6 @@ public class FileController(IFileService fileService) : BaseController
         await fileService.DeleteFile(libraryId, fileLibraryPath);
         return Ok();
     }
+
     #endregion
 }
