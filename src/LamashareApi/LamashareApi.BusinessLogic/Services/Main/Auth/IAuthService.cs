@@ -7,6 +7,12 @@ namespace Lamashare.BusinessLogic.Services.Main.Auth;
 
 public interface IAuthService
 {
+    Task<Sdto> Oidc(string code);
+
+    Task<Sdto> GetIdpDeviceClientId();
+
+    Task<Sdto> GetIdpUrl();
+    
     /// <summary>
     /// Utility function used for making an auth dto out of JwtClaims.
     /// </summary>
