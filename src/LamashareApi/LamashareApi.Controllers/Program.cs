@@ -4,6 +4,7 @@ using Asp.Versioning;
 using Asp.Versioning.Conventions;
 using Lamashare.BusinessLogic.Mapper.AutoMapper;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
+using Lamashare.BusinessLogic.Services.Core.Invoker;
 using Lamashare.BusinessLogic.Services.Core.Localization;
 using Lamashare.BusinessLogic.Services.Main.Auth;
 using Lamashare.BusinessLogic.Services.Main.File;
@@ -133,6 +134,7 @@ builder.Services.AddScoped<ILibraryService, LibraryService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISystemSettingsService, SystemSettingsService>();
+builder.Services.AddScoped<IInvokerService, InvokerService>();
 
 #endregion
 
