@@ -1,5 +1,6 @@
 using Lamashare.BusinessLogic.Dtos.File;
 using Lamashare.BusinessLogic.Dtos.Generic;
+using Lamashare.BusinessLogic.Services.Core.AccessControl;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using LamashareApi.Database.DB.Entities;
 using LamashareApi.Database.Enums;
@@ -14,7 +15,7 @@ using BlockDto = Lamashare.BusinessLogic.Dtos.File.BlockDto;
 
 namespace Lamashare.BusinessLogic.Services.Main.File;
 
-public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFileService
+public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps, IAccessControlService acs) : IFileService
 {
     #region GET - Total checksum
 
@@ -26,6 +27,10 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
         #endregion
 
+        #region Access-Control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
+        #endregion
+        
         #region Generate checksum
 
         var libSysPath = LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation);
@@ -52,6 +57,10 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
         var file = await repoWrap.FileRepo.QueryAll().FirstOrDefaultAsync(x => x.FileLibraryPath == libraryFilePath);
         if (file == null) throw new NotFoundUSException();
 
+        #endregion
+        
+        #region Access-Control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
         #endregion
 
         #region generate info
@@ -82,12 +91,6 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
     public async Task<FileStatusDto> GetFileStatus(Guid libraryId, string libraryFilePath)
     {
-        #region libs load
-
-        var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
-
-        #endregion
-
         throw new NotImplementedException();
     }
 
@@ -101,6 +104,10 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
         var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
 
+        #endregion
+        
+        #region Access-Control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
         #endregion
 
         #region generate blocklist
@@ -129,6 +136,15 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             .Include(x => x.Library)
             .FirstOrDefaultAsync(x => x.Blocks.Any(y => y.Checksum == blockChecksum));
 
+        #region Access-Control
+
+        if (file != null)
+        {
+            (await acs.FromInvoker()).OwnsLibrary(file.Library);
+        }
+        
+        #endregion
+        
         if (file == null) throw new NotFoundUSException();
 
         var blockEntity = file.Blocks.First(x => x.Checksum == blockChecksum);
@@ -157,10 +173,18 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
     public async Task<FileTransactionDto> CreateFileTransaction(FileTransactionCreateDto createDto)
     {
-        #region load file
+        #region load lib
 
         var hasFileJustBeenCreated = false;
         var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(createDto.LibraryId);
+        
+        #endregion
+ 
+        #region Access-Control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
+        #endregion
+        
+        #region Load file
         var existingFile = await repoWrap.FileRepo.QueryAll()
             .Include(x => x.Blocks)
             .FirstOrDefaultAsync(x => x.FileLibraryPath == createDto.FileLibraryPath && x.Library == lib);
@@ -270,11 +294,18 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
     public async Task<StatusDto> PushBlock(BlockPushDto blockDto)
     {
+        var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(blockDto.LibraryId);
+        
+        #region Access-Control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
+        #endregion
+        
         #region load transaction
-
+        
         var transaction = await repoWrap.FileTransactionRepo
             .QueryAll()
             .Include(x => x.File)
+            .ThenInclude(x => x.Library)
             .FirstOrDefaultAsync(x => x.Id == blockDto.TransactionId);
 
         #endregion
@@ -287,7 +318,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
         if (existingBlock != null) throw new BlockPushDuplicateUSException();
 
-        var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(blockDto.LibraryId);
+        
         if (transaction == null) throw new NotFoundUSException();
 
         if (transaction.Type == EFileTransactionType.PULL) throw new TransactionTypeUSException();
@@ -327,6 +358,10 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
         var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(dto.LibraryId);
 
+        #endregion
+        
+        #region Access-Control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
         #endregion
 
         #region gen diff
@@ -383,9 +418,14 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
 
     public async Task DeleteFile(Guid libraryId, string libraryFilePath)
     {
-        #region load required data
-
         var lib = await repoWrap.LibraryRepo.GetByIdAsyncThrows(libraryId);
+        
+        #region Access-Control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
+        #endregion
+        
+        #region load required data
+        
         var libPath = LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation);
         var fileSysPath = FileUtil.FileLibPathToSysPath(libPath, libraryFilePath);
 
@@ -456,6 +496,12 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps) : IFi
             .ThenInclude(x => x.Library)
             .FirstOrDefaultAsync(x => x.Id == transactionId);
 
+        #endregion
+        
+        #region Access-Control
+        if (transaction != null) {
+            (await acs.FromInvoker()).OwnsLibrary(transaction.File.Library);
+        }
         #endregion
 
         #region checks

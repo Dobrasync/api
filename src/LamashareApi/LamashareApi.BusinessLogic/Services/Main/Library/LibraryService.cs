@@ -3,6 +3,7 @@ using Gridify;
 using Gridify.EntityFramework;
 using Lamashare.BusinessLogic.Dtos.Library;
 using Lamashare.BusinessLogic.Mapper.Gridify;
+using Lamashare.BusinessLogic.Services.Core.AccessControl;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using Lamashare.BusinessLogic.Services.Core.Localization;
 using LamashareApi.Database.DB.Entities;
@@ -14,13 +15,19 @@ using Microsoft.EntityFrameworkCore;
 namespace Lamashare.BusinessLogic.Services.Main.Library;
 
 public class LibraryService(
+    IAccessControlService acs,
     IRepoWrapper repoWrap,
     IMapper mapper,
     ILocalizationService localizationService,
     IAppsettingsProvider apps) : ILibraryService
 {
+    #region POST - Create library
     public async Task<LibraryDto> CreateLibrary(LibraryCreateDto createDto)
     {
+        #region Access-control
+        await acs.FromInvoker();
+        #endregion
+        
         var library = await repoWrap.LibraryRepo.QueryAll()
             .FirstOrDefaultAsync(x => x.Name.ToLower() == createDto.Name);
 
@@ -41,17 +48,27 @@ public class LibraryService(
 
         return mapper.Map<LibraryDto>(inserted);
     }
-
+    #endregion
+    #region GET - Get library
     public async Task<LibraryDto> GetLibraryById(Guid guid)
     {
         var lib = await GetLibraryByIdShared(guid);
+        
+        #region Access-control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
+        #endregion
 
         return mapper.Map<LibraryDto>(lib);
     }
-
+    #endregion
+    #region PUT - Update library
     public async Task<LibraryDto> UpdateLibrary(Guid id, LibraryUpdateDto dto)
     {
         var lib = await GetLibraryByIdShared(id);
+        
+        #region Access-control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
+        #endregion
 
         mapper.Map(dto, lib);
 
@@ -59,14 +76,21 @@ public class LibraryService(
 
         return mapper.Map<LibraryDto>(lib);
     }
-
-    public Task<LibraryDto> DeleteLibrary(Guid guid)
+    #endregion
+    #region DELETE - Delete library
+    public async Task<LibraryDto> DeleteLibrary(Guid guid)
     {
+        var lib = await GetLibraryByIdShared(guid);
+        
+        #region Access-control
+        (await acs.FromInvoker()).OwnsLibrary(lib);
+        #endregion
+        
         throw new NotImplementedException();
     }
+    #endregion
 
-    #region get
-
+    #region common
     private async Task<LibraryEntity> GetLibraryByIdShared(Guid id)
     {
         var lib = await repoWrap.LibraryRepo.QueryAll().FirstOrDefaultAsync(x => x.Id == id);
@@ -76,9 +100,7 @@ public class LibraryService(
 
         return lib;
     }
-
     #endregion
-
     #region pagination
 
     private async Task<Paging<LibraryDto>> PaginateLibrary(IQueryable<LibraryEntity> queryable,
