@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\lamashare-core\src\LamashareCore\LamashareCore\LamashareCore.csproj"/>
-        <ProjectReference Include="..\LamashareApi.Database\LamashareApi.Database.csproj"/>
-        <ProjectReference Include="..\LamashareApi.Shared\LamashareApi.Shared.csproj"/>
+        <ProjectReference Include="..\..\..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
+        <ProjectReference Include="..\Dobrasync.Api.Database\Dobrasync.Api.Database.csproj" />
+        <ProjectReference Include="..\Dobrasync.Api.Shared\Dobrasync.Api.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

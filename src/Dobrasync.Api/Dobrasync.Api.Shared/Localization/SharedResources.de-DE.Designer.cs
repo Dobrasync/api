@@ -28,7 +28,7 @@ namespace LamashareApi.Shared.Localization {
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("LamashareApi.Shared.Localization.SharedResources_de_DE", typeof(SharedResources_de_DE).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Dobrasync.Api.Shared.Localization.SharedResources_de_DE", typeof(SharedResources_de_DE).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
