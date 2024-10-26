@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Controllers", "LamashareApi.Controllers\LamashareApi.Controllers.csproj", "{4DF08293-D276-436E-817A-B99A5CEEDA0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Api.ApiControllers", "Dobrasync.Api.ApiControllers\Dobrasync.Api.ApiControllers.csproj", "{4DF08293-D276-436E-817A-B99A5CEEDA0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.BusinessLogic", "LamashareApi.BusinessLogic\LamashareApi.BusinessLogic.csproj", "{B9632F97-4838-4ABB-8BB2-6918AAD11021}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Api.BusinessLogic", "Dobrasync.Api.BusinessLogic\Dobrasync.Api.BusinessLogic.csproj", "{B9632F97-4838-4ABB-8BB2-6918AAD11021}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Shared", "LamashareApi.Shared\LamashareApi.Shared.csproj", "{3F777783-FB23-4261-A428-E1C4CF79CB3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Api.Shared", "Dobrasync.Api.Shared\Dobrasync.Api.Shared.csproj", "{3F777783-FB23-4261-A428-E1C4CF79CB3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Database", "LamashareApi.Database\LamashareApi.Database.csproj", "{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Api.Database", "Dobrasync.Api.Database\Dobrasync.Api.Database.csproj", "{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareCore", "..\..\..\lamashare-core\src\LamashareCore\LamashareCore\LamashareCore.csproj", "{9520A0D7-D03C-419F-9FBD-4F97F09881F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Api.Tests", "Dobrasync.Api.Tests\Dobrasync.Api.Tests.csproj", "{8D3D08A0-AD98-409A-82F6-24EB5AE50938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamashareApi.Tests", "LamashareApi.Tests\LamashareApi.Tests.csproj", "{8D3D08A0-AD98-409A-82F6-24EB5AE50938}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Core.Main", "..\..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj", "{ACA63248-1702-4125-A317-DEE6B78FB515}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,13 +34,13 @@ Global
 		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A1B05C1-01D6-4FF9-B72C-A61D742D37ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9520A0D7-D03C-419F-9FBD-4F97F09881F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8D3D08A0-AD98-409A-82F6-24EB5AE50938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D3D08A0-AD98-409A-82F6-24EB5AE50938}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D3D08A0-AD98-409A-82F6-24EB5AE50938}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D3D08A0-AD98-409A-82F6-24EB5AE50938}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA63248-1702-4125-A317-DEE6B78FB515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA63248-1702-4125-A317-DEE6B78FB515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA63248-1702-4125-A317-DEE6B78FB515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA63248-1702-4125-A317-DEE6B78FB515}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
