@@ -24,8 +24,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          ./scripts/build-docker.sh ${{ github.event.inputs.version }}"
+          ./scripts/build-docker.sh ${{ github.event.inputs.version }}
 
       - name: Push Docker image to GHCR
         run: |
-          ./scripts/publish-docker.sh ${{ github.event.inputs.version }}"
+          ./scripts/publish-docker.sh ${{ github.event.inputs.version }}
