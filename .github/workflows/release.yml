@@ -21,15 +21,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: CD into scripts dir
-        run: |
-          cd scripts
-
+          
       - name: Build Docker image
         run: |
-          ./build-docker.sh ${{ github.event.inputs.version }}
+          cd scripts && ./build-docker.sh ${{ github.event.inputs.version }}
 
       - name: Push Docker image to GHCR
         run: |
-          ./publish-docker.sh ${{ github.event.inputs.version }}
+          cd scripts && ./publish-docker.sh ${{ github.event.inputs.version }}
