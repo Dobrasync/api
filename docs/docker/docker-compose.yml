@@ -1,0 +1,25 @@
+services:
+  api:
+    image: dobrasync-api:0.0.1
+    volumes:
+      - ./appsettings.json:/app/appsettings.json
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mariadb:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: dobrasync
+      MYSQL_DATABASE: dobrasync
+      MYSQL_USER: dobrasync
+      MYSQL_PASSWORD: dobrasync
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 3
