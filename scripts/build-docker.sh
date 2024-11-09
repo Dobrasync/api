@@ -14,22 +14,9 @@ source common-vars.sh
 cd "$SOLUTION_DIR" || { echo "Failed to change directory to SOLUTION_DIR!"; exit 1; }
 #endregion
 
-#region Restore
-dotnet restore $SOLUTION_FILE || { echo "Failed to restore packages!"; exit 1; }
-#endregion
-
-#region Build
-dotnet build $SOLUTION_FILE --configuration Release || { echo "Failed to build!"; exit 1; }
-#endregion
-
-#region Publish
-mkdir temp
-dotnet publish $SOLUTION_FILE -c Release -o ./temp/publish || { echo "Failed to publish!"; exit 1; }
-#endregion
-
 #region Build docker image
 echo "Building the Docker image..."
-docker build -t $DOCKER_IMAGE_NAME:$VERSION -f Dockerfile . || { echo "Failed to build Docker image!"; exit 1; }
+docker build --no-cache -t $DOCKER_IMAGE_NAME:$VERSION -f Dockerfile . || { echo "Failed to build Docker image!"; exit 1; }
 #endregion
 
 #region Tag docker image
