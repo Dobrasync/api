@@ -11,6 +11,7 @@
         <ProjectReference Include="..\..\..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
         <ProjectReference Include="..\Dobrasync.Api.Database\Dobrasync.Api.Database.csproj" />
         <ProjectReference Include="..\Dobrasync.Api.Shared\Dobrasync.Api.Shared.csproj" />
+        <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
     </ItemGroup>
 
     <ItemGroup>
