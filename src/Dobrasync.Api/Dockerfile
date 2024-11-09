@@ -11,5 +11,5 @@ COPY ./temp/publish/ ./
 EXPOSE 80
 
 # Set the entry point for the application
-ENTRYPOINT ["dotnet", "YourProjectName.dll"]
+ENTRYPOINT ["dotnet", "Dobrasync.dll"]
 
