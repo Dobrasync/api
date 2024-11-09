@@ -26,6 +26,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
         <ProjectReference Include="..\Dobrasync.Api.BusinessLogic\Dobrasync.Api.BusinessLogic.csproj" />
+        <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
     </ItemGroup>
 
     <ItemGroup>
