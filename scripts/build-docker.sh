@@ -16,7 +16,7 @@ cd "$SOLUTION_DIR" || { echo "Failed to change directory to SOLUTION_DIR!"; exit
 
 #region Build docker image
 echo "Building the Docker image..."
-docker build --no-cache -t $DOCKER_IMAGE_NAME:$VERSION -f Dockerfile . || { echo "Failed to build Docker image!"; exit 1; }
+docker build --progress=plain -t $DOCKER_IMAGE_NAME:$VERSION -f Dockerfile . || { echo "Failed to build Docker image!"; exit 1; }
 #endregion
 
 #region Tag docker image
