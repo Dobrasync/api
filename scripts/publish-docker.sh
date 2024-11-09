@@ -11,6 +11,6 @@ fi
 source common-vars.sh
 
 #region Push
-docker push ghcr.io/$GHCR_NAMESPACE/$DOCKER_IMAGE_NAME:$VERSION
+docker push ghcr.io/dobrasync/dobrasync-api:$VERSION
 #endregion
 
