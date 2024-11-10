@@ -14,7 +14,7 @@
     <img src="docs/assets/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">CLI CLient</h3>
+  <h3 align="center">API</h3>
 
   <p align="center">
     Central API handling sync transactions.
