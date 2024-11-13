@@ -3,6 +3,8 @@ services:
     image: dobrasync-api:0.0.1
     volumes:
       - ./appsettings.json:/app/appsettings.json
+      - ./libraries:/app/libraries
+      - ./tempblocks:/app/tempblocks
     depends_on:
       db:
         condition: service_healthy
@@ -16,6 +18,8 @@ services:
       MYSQL_DATABASE: dobrasync
       MYSQL_USER: dobrasync
       MYSQL_PASSWORD: dobrasync
+    volumes:
+      - ./db:/var/lib/mysql/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
