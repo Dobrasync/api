@@ -15,8 +15,8 @@ To persist your data you need to back up the following container dirs and files:
 ### app service
 
 - `/app/appsettings.json`
-- `/app/libraries`
-- `/app/tempblocks`
+- `/libraries`
+- `/tempblocks`
 
 ### db service
 
