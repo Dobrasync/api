@@ -4,6 +4,11 @@ using LamashareApi.Database.Repos;
 using LamashareApi.Shared.Exceptions.UserspaceException;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Zitadel.Authentication;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Zitadel.User.V1;
 
 namespace Lamashare.BusinessLogic.Services.Core.Invoker;
 
@@ -14,7 +19,18 @@ public class InvokerService(IRepoWrapper repoWrap, IHttpContextAccessor contextA
         UserEntity? user = await GetInvokerQuery().FirstOrDefaultAsync();
         if (user == null)
         {
-            throw new InvalidAuthTokenUSException();
+            
+            // Create new user if not exists
+            string? username = GetPreferredUsername();
+            if (username == null) throw new NotFoundUSException();
+            
+            UserEntity newUser = new()
+            {
+                Username = username
+            };
+            
+            await repoWrap.UserRepo.InsertAsync(newUser);
+            user = newUser;
         }
 
         return user;
@@ -29,24 +45,6 @@ public class InvokerService(IRepoWrapper repoWrap, IHttpContextAccessor contextA
     {
         var context = contextAccessor.HttpContext;
 
-        if (context?.Request.Headers.TryGetValue("Authorization", out var authHeader) == true)
-        {
-            // Ensure the header starts with "Bearer "
-            if (authHeader.ToString().StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-            {
-                var token = authHeader.ToString().Substring("Bearer ".Length).Trim();
-
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadJwtToken(token);
-
-                // Check if the 'preferred_username' claim exists
-                var preferredUsernameClaim = jwtToken.Claims
-                    .FirstOrDefault(c => c.Type == "preferred_username");
-
-                return preferredUsernameClaim?.Value;
-            }
-        }
-
-        return null; // or throw an exception if preferred
+        return context?.User?.Claims.FirstOrDefault(x => x.Type == "preferred_username")?.Value;
     }
 }

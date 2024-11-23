@@ -2,28 +2,30 @@ namespace Lamashare.BusinessLogic.Services.Core;
 
 public class LoggingService : ILoggingService
 {
+    private static readonly NLog.Logger logger = NLog.LogManager.GetLogger("Main");
+    
     public void LogDebug(string msg)
     {
-        throw new NotImplementedException();
+        logger.Debug(msg);
     }
 
     public void LogInfo(string msg)
     {
-        throw new NotImplementedException();
+        logger.Info(msg);
     }
 
     public void LogWarn(string msg)
     {
-        throw new NotImplementedException();
+        logger.Warn(msg);
     }
 
     public void LogError(string msg)
     {
-        throw new NotImplementedException();
+        logger.Error(msg);
     }
 
     public void LogFatal(string msg)
     {
-        throw new NotImplementedException();
+        logger.Fatal(msg);
     }
 }

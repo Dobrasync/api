@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Lamashare.BusinessLogic.Dtos.Auth;
 using Lamashare.BusinessLogic.Services.Main.Auth;
 using LamashareApi.Controllers.Base;
 using LamashareApi.Shared.Auth;
@@ -12,33 +13,10 @@ namespace LamashareApi.Controllers;
 [SwaggerTag("Auth")]
 public class AuthController(IAuthService authService) : BaseController
 {
-    #region Test
-
-    #region GET - Basic
-
-    [HttpGet("basic")]
-    [Authorize(AuthenticationSchemes = AuthSchemes.Basic)]
-    public async Task<IActionResult> GetBasic()
+    [HttpGet("session-info")]
+    public async Task<ActionResult<SessionInfoDto>> GetSessionInfo()
     {
-        return Ok(Result());
+        SessionInfoDto dto = await authService.GetSessionInfo();
+        return Ok(dto);
     }
-
-    #endregion
-
-    private object Result()
-    {
-        return new
-        {
-            Ping = "Pong",
-            Timestamp = DateTime.Now,
-            AuthType = User.Identity?.AuthenticationType,
-            UserName = User.Identity?.Name,
-            UserId = User.FindFirstValue(OidcClaimTypes.Subject),
-            Claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList(),
-            IsInAdminRole = User.IsInRole("Admin"),
-            IsInUserRole = User.IsInRole("User")
-        };
-    }
-
-    #endregion
 }
