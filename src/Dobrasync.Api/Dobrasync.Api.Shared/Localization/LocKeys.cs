@@ -2,6 +2,7 @@ namespace LamashareApi.Shared.Localization;
 
 public static class LocKeys
 {
+    #region Exceptions
     public static readonly LocKey ExceptionBadInput = new()
     {
         Key = "exception.badInput"
@@ -16,9 +17,7 @@ public static class LocKeys
     {
         Key = "exception.notFound"
     };
-
-    #region Transaction
-
+    
     public static readonly LocKey ExceptionTransactionAlreadyComplete = new()
     {
         Key = "exception.transactionAlreadyComplete"
@@ -38,6 +37,11 @@ public static class LocKeys
     {
         Key = "exception.transactionType"
     };
-
+    
+    
+    public static readonly LocKey ExceptionLibraryNameConflict = new()
+    {
+        Key = "exception.libraryNameConflict"
+    };
     #endregion
 }

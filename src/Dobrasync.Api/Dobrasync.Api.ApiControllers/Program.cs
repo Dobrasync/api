@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
 using Lamashare.BusinessLogic.Mapper.AutoMapper;
+using Lamashare.BusinessLogic.Services.Core;
+using Lamashare.BusinessLogic.Services.Core.AccessControl;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
 using Lamashare.BusinessLogic.Services.Core.Invoker;
 using Lamashare.BusinessLogic.Services.Core.Localization;
@@ -11,6 +13,7 @@ using Lamashare.BusinessLogic.Services.Main.File;
 using Lamashare.BusinessLogic.Services.Main.Library;
 using Lamashare.BusinessLogic.Services.Main.System;
 using Lamashare.BusinessLogic.Services.Main.SystemSettings;
+using Lamashare.BusinessLogic.Services.Main.Users;
 using LamashareApi.Database.DB;
 using LamashareApi.Database.Repos;
 using LamashareApi.Middleware.ExceptionInteceptor;
@@ -135,6 +138,9 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISystemSettingsService, SystemSettingsService>();
 builder.Services.AddScoped<IInvokerService, InvokerService>();
+builder.Services.AddScoped<IAccessControlService, AccessControlService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<ILoggingService, LoggingService>();
 
 #endregion
 
@@ -148,10 +154,10 @@ var app = builder.Build();
 
 #region DevSwagger
 
-if (app.Environment.IsDevelopment())
+if (appsettings.Dev.EnableSwagger)
 {
     app.UseSwagger();
-    app.UseSwaggerUI(config => { config.SwaggerEndpoint("/swagger/v1/swagger.json", "Lamashare API"); });
+    app.UseSwaggerUI(config => { config.SwaggerEndpoint("/swagger/v1/swagger.json", "Dobrasync API"); });
 }
 
 #endregion

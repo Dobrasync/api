@@ -5,16 +5,19 @@ using Lamashare.BusinessLogic.Dtos.Library;
 using Lamashare.BusinessLogic.Mapper.Gridify;
 using Lamashare.BusinessLogic.Services.Core.AccessControl;
 using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
+using Lamashare.BusinessLogic.Services.Core.Invoker;
 using Lamashare.BusinessLogic.Services.Core.Localization;
 using LamashareApi.Database.DB.Entities;
 using LamashareApi.Database.Repos;
 using LamashareApi.Shared.Constants;
 using LamashareApi.Shared.Exceptions.UserspaceException;
+using LamashareApi.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lamashare.BusinessLogic.Services.Main.Library;
 
 public class LibraryService(
+    IInvokerService invokerService,
     IAccessControlService acs,
     IRepoWrapper repoWrap,
     IMapper mapper,
@@ -28,15 +31,16 @@ public class LibraryService(
         await acs.FromInvoker();
         #endregion
         
-        var library = await repoWrap.LibraryRepo.QueryAll()
-            .FirstOrDefaultAsync(x => x.Name.ToLower() == createDto.Name);
+        UserEntity invoker = await invokerService.GetInvokerQuery().Include(x => x.Libraries).FirstAsync();
+        
+        if (invoker.Libraries.Any(x => x.Name.ToLower() == createDto.Name)) throw new LibraryNameConflictUSException();
 
-        if (library != null) throw new LibraryNameConflictUSException();
-
-        var inserted = await repoWrap.LibraryRepo.InsertAsync(new LibraryEntity
+        LibraryEntity inserted = new()
         {
             Name = createDto.Name
-        });
+        };
+        invoker.Libraries.Add(inserted);
+        await repoWrap.UserRepo.UpdateAsync(invoker);
 
         #region create new library dir
 

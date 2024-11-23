@@ -9,7 +9,7 @@ public static class QueryableExtensions
     public static async Task<T> FirstOrThrowAsync<T>(
         this IQueryable<T> source)
     {
-        var result = await source.FirstOrDefaultAsync(null);
+        var result = await source.FirstOrDefaultAsync();
 
         if (result == null)
         {

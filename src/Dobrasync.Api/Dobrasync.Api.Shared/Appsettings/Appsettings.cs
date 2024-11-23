@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using LamashareApi.Shared.Appsettings.Auth;
+using LamashareApi.Shared.Appsettings.Dev;
 using LamashareApi.Shared.Appsettings.Storage;
 using LamashareApi.Shared.Appsettings.Sync;
 using LamashareApi.Shared.Appsettings.System;
@@ -8,6 +9,11 @@ namespace LamashareApi.Shared.Appsettings;
 
 public class Appsettings
 {
+    /// <summary>
+    ///     Development settings. Should not be used in production.
+    /// </summary>
+    public DevAS Dev { get; set; } = new();
+    
     /// <summary>
     ///     Core configuration.
     /// </summary>

@@ -33,4 +33,7 @@
     <data name="exception.notFound" xml:space="preserve">
         <value>Resource does not exist.</value>
     </data>
+    <data name="exception.libraryNameConflict" xml:space="preserve">
+        <value>A library with same name already exists.</value>
+    </data>
 </root>
