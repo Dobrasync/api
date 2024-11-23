@@ -102,6 +102,10 @@ Check your inputs in the summary and click create if everything is correct. Copy
 
 ![Zitadel API App details in appsettings](docs/assets/zitadel-app-api-appsettings.png)
 
+Now we need to set up another application for device authentication (e.g. for the CLI Client).
+
+To do that, navigate back to the project page and click on `New` to add another app. Name it "Device" and choose "Native" as type of application. Choose "Device Code" as authentication method and continue to creation. Copy the generated `ClientId` to the `appsettings.json` `Device` `ClientId` inside the `Auth.Idp` block.
+
 #### Storage configuration
 
 The API needs a place to store all libraries and temporary blocks. You can specify these directories in the `appsettings.json` `Storage` block. If you are using Docker, it is best to leave these fields alone. 
