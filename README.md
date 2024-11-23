@@ -50,17 +50,60 @@
 
 ### Prerequisites
 
-TBD
+- Docker
 
 ### Installation
 
 TBD
 
 
+### Configuration
+
+#### Identity Provider
+
+For security reasons Dobrasync does not handle authentication on its own. Instead, it uses an external identity provider (IdP) like Keycloak, Authentik, Zitadel or similar that supports OpenID-Connect.
+
+You can self-host an IDP or use a hosted solution. That is entirely up to you.
+
+You'll then have to register the Dobrasync API as a new application and insert the Client ID and Client Secret in the `appsettings.json`.
+
+##### Setup in Zitadel
+
+This is an example of how to set up the application with Zitadel:
+
+Sign into the Zitadel console and navigate to `Projects`. Click on `Create new Project`. 
+
+![Zitadel Project Overview](docs/assets/zitadel-project-overview.png)
+
+Name it `Dobrasync` and click create.
+
+![Zitadel Project Creation](docs/assets/zitadel-project-create.png)
+
+![Zitadel Project Page](docs/assets/zitadel-project-empty.png)
+
+We'll now go ahead and create the application for the API. Go ahead and click on `New`. Name the application `API`, choose `API` as type of application and click continue.
+
+![Zitadel API App name and type](docs/assets/zitadel-app-api-type.png)
+
+Choose `Basic` as Authentication Method and continue. 
+
+![Zitadel API App auth type](docs/assets/zitadel-app-api-authtype.png)
+
+Check your inputs in the summary and click create if everything is correct. Copy the generated `ClientId` and `ClientSecret` to your APIs appsettings.json.
+
+![Zitadel API App summary](docs/assets/zitadel-app-api-summary-created.png)
+
+![Zitadel API App details in appsettings](docs/assets/zitadel-app-api-appsettings.png)
+
+#### Storage configuration
+
+The API needs a place to store all libraries and temporary blocks. You can specify these directories in the `appsettings.json` `Storage` block. If you are using Docker, it is best to leave these fields alone. 
+
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-TBD
+You can connect to the API with Dobrasync clients. More detailed instruction can be found in the in the respective repositories (e.g. [CLI Client](https://github.com/dobrasync/client-cli)).
 
 
 
