@@ -14,6 +14,9 @@ namespace LamashareApi.Controllers;
 public class AuthController(IAuthService authService) : BaseController
 {
     [HttpGet("session-info")]
+    [SwaggerOperation(
+        OperationId = nameof(GetSessionInfo)
+    )]
     public async Task<ActionResult<SessionInfoDto>> GetSessionInfo()
     {
         SessionInfoDto dto = await authService.GetSessionInfo();

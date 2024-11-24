@@ -10,6 +10,9 @@ namespace LamashareApi.Controllers;
 public class LibraryController(ILibraryService ls) : BaseController
 {
     [HttpPost]
+    [SwaggerOperation(
+        OperationId = nameof(CreateLibrary)
+    )]
     public async Task<ActionResult<LibraryDto>> CreateLibrary([FromBody] LibraryCreateDto cdto)
     {
         LibraryDto dto = await ls.CreateLibrary(cdto);
