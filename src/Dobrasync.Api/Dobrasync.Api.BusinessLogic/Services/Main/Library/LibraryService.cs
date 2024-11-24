@@ -85,12 +85,21 @@ public class LibraryService(
     public async Task<LibraryDto> DeleteLibrary(Guid guid)
     {
         var lib = await GetLibraryByIdShared(guid);
+        string directoryToDelete = LibraryUtil.GetLibraryDirectory(lib.Id, apps.GetAppsettings().Storage.LibraryLocation);
         
         #region Access-control
         (await acs.FromInvoker()).OwnsLibrary(lib);
         #endregion
         
-        throw new NotImplementedException();
+        #region Delete library from DB
+        await repoWrap.LibraryRepo.
+            DeleteAsync(lib);
+        #endregion
+        #region delete library director and files
+        Directory.Delete(directoryToDelete, true);
+        #endregion
+        
+        return mapper.Map<LibraryDto>(lib);
     }
     #endregion
 
