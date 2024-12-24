@@ -8,10 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
         <ProjectReference Include="..\..\..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
         <ProjectReference Include="..\Dobrasync.Api.Database\Dobrasync.Api.Database.csproj" />
         <ProjectReference Include="..\Dobrasync.Api.Shared\Dobrasync.Api.Shared.csproj" />
-        <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
+        <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Common\Dobrasync.Core.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

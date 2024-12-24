@@ -1,3 +1,5 @@
+using Dobrasync.Core.Common.Models;
+using Dobrasync.Core.Common.Util;
 using Lamashare.BusinessLogic.Dtos.File;
 using Lamashare.BusinessLogic.Dtos.Generic;
 using Lamashare.BusinessLogic.Services.Core.AccessControl;
@@ -8,9 +10,7 @@ using LamashareApi.Database.Repos;
 using LamashareApi.Shared.Constants;
 using LamashareApi.Shared.Exceptions.UserspaceException;
 using LamashareApi.Shared.Exceptions.UserspaceException.Block;
-using LamashareCore.Util;
 using Microsoft.EntityFrameworkCore;
-using Block = LamashareCore.Models.Block;
 using BlockDto = Lamashare.BusinessLogic.Dtos.File.BlockDto;
 
 namespace Lamashare.BusinessLogic.Services.Main.File;
@@ -593,7 +593,7 @@ public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps, IAcce
 
     #region Util
 
-    private async Task WriteTempBlockRange(List<Block> blocks)
+    private async Task WriteTempBlockRange(List<FileBlock> blocks)
     {
         foreach (var block in blocks) await WriteTempBlock(block.Checksum, block.Payload);
     }

@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Api.Database", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Api.Tests", "Dobrasync.Api.Tests\Dobrasync.Api.Tests.csproj", "{8D3D08A0-AD98-409A-82F6-24EB5AE50938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Core.Main", "submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj", "{53FF3CFE-9377-4AB7-BC25-62C3735FD96F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dobrasync.Core.Common", "submodules\core\src\Dobrasync.Core\Dobrasync.Core.Common\Dobrasync.Core.Common.csproj", "{17B602A5-DC4B-4BC8-A14B-C92539A18182}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +38,9 @@ Global
 		{8D3D08A0-AD98-409A-82F6-24EB5AE50938}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D3D08A0-AD98-409A-82F6-24EB5AE50938}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D3D08A0-AD98-409A-82F6-24EB5AE50938}.Release|Any CPU.Build.0 = Release|Any CPU
-		{53FF3CFE-9377-4AB7-BC25-62C3735FD96F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{53FF3CFE-9377-4AB7-BC25-62C3735FD96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{53FF3CFE-9377-4AB7-BC25-62C3735FD96F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{53FF3CFE-9377-4AB7-BC25-62C3735FD96F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17B602A5-DC4B-4BC8-A14B-C92539A18182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17B602A5-DC4B-4BC8-A14B-C92539A18182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17B602A5-DC4B-4BC8-A14B-C92539A18182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17B602A5-DC4B-4BC8-A14B-C92539A18182}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
