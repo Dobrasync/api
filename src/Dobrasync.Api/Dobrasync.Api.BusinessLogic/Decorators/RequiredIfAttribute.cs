@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Lamashare.BusinessLogic.Decorators;
+namespace Dobrasync.Api.BusinessLogic.Decorators;
 
 public class RequiredIfAttribute(string propertyName, object desiredValue) : ValidationAttribute
 {

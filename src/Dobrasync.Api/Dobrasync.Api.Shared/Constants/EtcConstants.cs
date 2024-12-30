@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Constants;
+namespace Dobrasync.Api.Shared.Constants;
 
 public class EtcConstants
 {

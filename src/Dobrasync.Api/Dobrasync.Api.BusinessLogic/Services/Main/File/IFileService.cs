@@ -1,7 +1,7 @@
-using Lamashare.BusinessLogic.Dtos.File;
-using Lamashare.BusinessLogic.Dtos.Generic;
+using Dobrasync.Api.BusinessLogic.Dtos.File;
+using Dobrasync.Api.BusinessLogic.Dtos.Generic;
 
-namespace Lamashare.BusinessLogic.Services.Main.File;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.File;
 
 public interface IFileService
 {

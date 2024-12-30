@@ -1,15 +1,15 @@
-using LamashareApi.Database.DB;
-using LamashareApi.Shared.Exceptions.UserspaceException;
+using Dobrasync.Api.Database.DB;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace LamashareApi.Database.Repos;
+namespace Dobrasync.Api.Database.Repos;
 
 public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
 {
     #region ctor
 
-    public Repo(LamashareContext context, IHttpContextAccessor hca)
+    public Repo(DobrasyncContext context, IHttpContextAccessor hca)
     {
         _context = context;
         _httpContextAccessor = hca;
@@ -85,7 +85,7 @@ public class Repo<TEntity> : IRepo<TEntity> where TEntity : class
 
     #region fields
 
-    private readonly LamashareContext _context;
+    private readonly DobrasyncContext _context;
     private readonly DbSet<TEntity> _dbSet;
     private readonly IHttpContextAccessor _httpContextAccessor;
 

@@ -1,4 +1,4 @@
-namespace LamashareApi.Database.Enums;
+namespace Dobrasync.Api.Database.Enums;
 
 public enum EFileTransactionStatus
 {

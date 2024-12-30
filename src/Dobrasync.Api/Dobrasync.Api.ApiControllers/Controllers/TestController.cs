@@ -1,24 +1,22 @@
-using Lamashare.BusinessLogic.Dtos.Auth;
-using Lamashare.BusinessLogic.Dtos.ErrorDto;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using LamashareApi.Controllers.Base;
+using Dobrasync.Api.ApiControllers.Controllers.Base;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Core.Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace LamashareApi.Controllers;
+namespace Dobrasync.Api.ApiControllers.Controllers;
 
 /// <summary>
 /// Some of these endpoints are only present so codegen on clients
 /// also includes otherwise excluded dtos.
 /// </summary>
-/// <param name="apps"></param>
 [SwaggerTag("Test")]
-public class TestController(IAppsettingsProvider apps) : BaseController
+public class TestController : BaseController
 {
     [HttpGet("error-dto-example")]
-    public ActionResult<ErrorDto> GetExampleErrorDto()
+    public ActionResult<ApiErrorDto> GetExampleErrorDto()
     {
-        return Ok(new ErrorDto()
+        return Ok(new ApiErrorDto()
         {
             Message = "Test",
             HttpStatusCode = 400,

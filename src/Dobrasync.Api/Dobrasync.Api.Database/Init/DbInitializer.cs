@@ -1,10 +1,10 @@
-using LamashareApi.Database.DB;
+using Dobrasync.Api.Database.DB;
 
-namespace LamashareApi.Database.Init;
+namespace Dobrasync.Api.Database.Init;
 
 public static class DbInitializer
 {
-    public static async void InitializeAsync(LamashareContext context)
+    public static async void InitializeAsync(DobrasyncContext context)
     {
         await context.Database.EnsureCreatedAsync();
         await context.SaveChangesAsync();

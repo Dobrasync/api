@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace LamashareApi.Shared.Appsettings.Storage;
+namespace Dobrasync.Api.Shared.Appsettings.Storage;
 
 public class StorageAS
 {

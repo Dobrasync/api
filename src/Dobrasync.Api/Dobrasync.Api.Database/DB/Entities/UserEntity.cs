@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using LamashareApi.Database.DB.Entities.Base;
-using LamashareApi.Shared.Permissions;
+using Dobrasync.Api.Database.DB.Entities.Base;
+using Dobrasync.Api.Shared.Permissions;
 
-namespace LamashareApi.Database.DB.Entities;
+namespace Dobrasync.Api.Database.DB.Entities;
 
 public class UserEntity : BaseEntity
 {

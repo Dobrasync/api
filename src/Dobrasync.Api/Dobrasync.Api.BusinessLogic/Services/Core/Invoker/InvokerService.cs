@@ -1,16 +1,10 @@
-using System.IdentityModel.Tokens.Jwt;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Database.Repos;
-using LamashareApi.Shared.Exceptions.UserspaceException;
+using Dobrasync.Api.Database.DB.Entities;
+using Dobrasync.Api.Database.Repos;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Zitadel.Authentication;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Zitadel.User.V1;
 
-namespace Lamashare.BusinessLogic.Services.Core.Invoker;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.Invoker;
 
 public class InvokerService(IRepoWrapper repoWrap, IHttpContextAccessor contextAccessor) : IInvokerService
 {

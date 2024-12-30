@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace LamashareApi.Tests.Mock;
+namespace Dobrasync.Api.Tests.Mock;
 
 public class MockHttpContextAccessor : IHttpContextAccessor
 {

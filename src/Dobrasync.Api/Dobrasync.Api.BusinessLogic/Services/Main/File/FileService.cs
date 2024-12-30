@@ -1,19 +1,20 @@
+using Dobrasync.Api.BusinessLogic.Dtos.File;
+using Dobrasync.Api.BusinessLogic.Dtos.Generic;
+using Dobrasync.Api.BusinessLogic.Services.Core.AccessControl;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Api.Database.DB.Entities;
+using Dobrasync.Api.Database.Enums;
+using Dobrasync.Api.Database.Repos;
+using Dobrasync.Api.Shared.Constants;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException.Block;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException.Transaction;
 using Dobrasync.Core.Common.Models;
 using Dobrasync.Core.Common.Util;
-using Lamashare.BusinessLogic.Dtos.File;
-using Lamashare.BusinessLogic.Dtos.Generic;
-using Lamashare.BusinessLogic.Services.Core.AccessControl;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Database.Enums;
-using LamashareApi.Database.Repos;
-using LamashareApi.Shared.Constants;
-using LamashareApi.Shared.Exceptions.UserspaceException;
-using LamashareApi.Shared.Exceptions.UserspaceException.Block;
 using Microsoft.EntityFrameworkCore;
-using BlockDto = Lamashare.BusinessLogic.Dtos.File.BlockDto;
+using BlockDto = Dobrasync.Api.BusinessLogic.Dtos.File.BlockDto;
 
-namespace Lamashare.BusinessLogic.Services.Main.File;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.File;
 
 public class FileService(IRepoWrapper repoWrap, IAppsettingsProvider apps, IAccessControlService acs) : IFileService
 {

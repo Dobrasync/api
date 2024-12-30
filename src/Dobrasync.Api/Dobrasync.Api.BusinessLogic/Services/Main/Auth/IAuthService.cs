@@ -1,6 +1,6 @@
-using Lamashare.BusinessLogic.Dtos.Auth;
+using Dobrasync.Api.BusinessLogic.Dtos.Auth;
 
-namespace Lamashare.BusinessLogic.Services.Main.Auth;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.Auth;
 
 public interface IAuthService
 {

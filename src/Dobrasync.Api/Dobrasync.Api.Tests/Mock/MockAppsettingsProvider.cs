@@ -1,10 +1,11 @@
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using LamashareApi.Shared.Appsettings;
-using LamashareApi.Shared.Appsettings.Auth;
-using LamashareApi.Shared.Appsettings.Storage;
-using LamashareApi.Shared.Appsettings.System;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Api.Shared.Appsettings;
+using Dobrasync.Api.Shared.Appsettings.Auth;
+using Dobrasync.Api.Shared.Appsettings.Auth.Idp;
+using Dobrasync.Api.Shared.Appsettings.Core;
+using Dobrasync.Api.Shared.Appsettings.Storage;
 
-namespace LamashareApi.Tests.Mock;
+namespace Dobrasync.Api.Tests.Mock;
 
 public class MockAppsettingsProvider : IAppsettingsProvider
 {

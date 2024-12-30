@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Exceptions.UserspaceException;
+namespace Dobrasync.Api.Shared.Exceptions.UserspaceException;
 
 public class UserspaceException : Exception
 {

@@ -1,7 +1,7 @@
-using LamashareApi.Shared.Localization;
+using Dobrasync.Api.Shared.Localization;
 using Microsoft.Extensions.Localization;
 
-namespace Lamashare.BusinessLogic.Services.Core.Localization;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.Localization;
 
 public class LocalizationService(IStringLocalizer<SharedResources> localizer) : ILocalizationService
 {

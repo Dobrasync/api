@@ -2,23 +2,22 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
-using Lamashare.BusinessLogic.Mapper.AutoMapper;
-using Lamashare.BusinessLogic.Services.Core;
-using Lamashare.BusinessLogic.Services.Core.AccessControl;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using Lamashare.BusinessLogic.Services.Core.Invoker;
-using Lamashare.BusinessLogic.Services.Core.Localization;
-using Lamashare.BusinessLogic.Services.Main.Auth;
-using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using Lamashare.BusinessLogic.Services.Main.System;
-using Lamashare.BusinessLogic.Services.Main.SystemSettings;
-using Lamashare.BusinessLogic.Services.Main.Users;
-using LamashareApi.Database.DB;
-using LamashareApi.Database.Repos;
-using LamashareApi.Middleware.ExceptionInteceptor;
-using LamashareApi.Shared.Appsettings;
-using LamashareApi.Shared.Auth;
+using Dobrasync.Api.ApiControllers.Middleware.ExceptionInteceptor;
+using Dobrasync.Api.BusinessLogic.Mapper.AutoMapper;
+using Dobrasync.Api.BusinessLogic.Services.Core.AccessControl;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Api.BusinessLogic.Services.Core.Invoker;
+using Dobrasync.Api.BusinessLogic.Services.Core.Localization;
+using Dobrasync.Api.BusinessLogic.Services.Core.Logging;
+using Dobrasync.Api.BusinessLogic.Services.Core.SystemSettings;
+using Dobrasync.Api.BusinessLogic.Services.Main.Auth;
+using Dobrasync.Api.BusinessLogic.Services.Main.File;
+using Dobrasync.Api.BusinessLogic.Services.Main.Library;
+using Dobrasync.Api.BusinessLogic.Services.Main.Users;
+using Dobrasync.Api.Database.DB;
+using Dobrasync.Api.Database.Repos;
+using Dobrasync.Api.Shared.Appsettings;
+using Dobrasync.Api.Shared.Auth;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -49,7 +48,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Lamashare API", Version = "v1" });
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Dobrasync API", Version = "v1" });
     opt.EnableAnnotations();
 });
 
@@ -128,7 +127,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IAppsettingsProvider, AppsettingsProvider>();
 builder.Services.AddScoped<ILocalizationService, LocalizationService>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
-builder.Services.AddDbContext<LamashareContext>(opt =>
+builder.Services.AddDbContext<DobrasyncContext>(opt =>
 {
     opt.UseMySQL(builder.Configuration.GetConnectionString("MainDb")!);
 });
@@ -208,7 +207,7 @@ app.UseAuthorization();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<LamashareContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<DobrasyncContext>();
     // use context
     dbContext.Database.EnsureCreated();
 }

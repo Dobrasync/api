@@ -1,11 +1,7 @@
-using Lamashare.BusinessLogic.Dtos.File;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using LamashareApi.Tests.Common;
+using Dobrasync.Api.Tests.Common;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LamashareApi.Tests.Fixtures;
+namespace Dobrasync.Api.Tests.Fixtures;
 
 public class NewInstanceTestFixture : IAsyncLifetime
 {

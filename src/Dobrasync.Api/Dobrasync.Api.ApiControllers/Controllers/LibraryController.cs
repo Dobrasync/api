@@ -1,11 +1,11 @@
 using System.Net.Mime;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using LamashareApi.Controllers.Base;
+using Dobrasync.Api.ApiControllers.Controllers.Base;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Services.Main.Library;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace LamashareApi.Controllers;
+namespace Dobrasync.Api.ApiControllers.Controllers;
 
 public class LibraryController(ILibraryService ls) : BaseController
 {

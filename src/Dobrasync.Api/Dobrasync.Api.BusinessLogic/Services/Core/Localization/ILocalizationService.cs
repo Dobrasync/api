@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Services.Core.Localization;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.Localization;
 
 public interface ILocalizationService
 {

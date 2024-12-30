@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using LamashareApi.Shared.Appsettings.Sync.Transactions;
+using Dobrasync.Api.Shared.Appsettings.Sync.Transaction;
 
-namespace LamashareApi.Shared.Appsettings.Sync;
+namespace Dobrasync.Api.Shared.Appsettings.Sync;
 
 public class SyncAS
 {

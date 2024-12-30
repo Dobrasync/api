@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Services.Core.AccessControl;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.AccessControl;
 
 public interface IAccessControlService
 {

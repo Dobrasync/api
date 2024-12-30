@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace LamashareApi.Shared.Appsettings.Auth;
+namespace Dobrasync.Api.Shared.Appsettings.Auth.Idp;
 
 public class ApiAS
 {

@@ -1,12 +1,13 @@
+using Dobrasync.Api.BusinessLogic.Dtos.File;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Services.Main.File;
+using Dobrasync.Api.BusinessLogic.Services.Main.Library;
+using Dobrasync.Api.Database.Enums;
+using Dobrasync.Api.Tests.Common;
 using Dobrasync.Core.Common.Util;
-using Lamashare.BusinessLogic.Dtos.File;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using LamashareApi.Tests.Common;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LamashareApi.Tests.Fixtures;
+namespace Dobrasync.Api.Tests.Fixtures;
 
 public class GenericTestFixture : IAsyncLifetime
 {

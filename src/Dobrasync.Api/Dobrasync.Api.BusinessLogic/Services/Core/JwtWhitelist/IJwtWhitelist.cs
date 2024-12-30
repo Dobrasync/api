@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Services.Main.JwtWhitelist;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.JwtWhitelist;
 
 public interface IJwtWhitelist
 {

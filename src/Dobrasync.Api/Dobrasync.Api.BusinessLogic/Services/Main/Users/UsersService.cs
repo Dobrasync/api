@@ -1,15 +1,13 @@
 using AutoMapper;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Dtos.User;
+using Dobrasync.Api.BusinessLogic.Util;
+using Dobrasync.Api.Database.DB.Entities;
+using Dobrasync.Api.Database.Repos;
 using Gridify;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Dtos.User;
-using Lamashare.BusinessLogic.Util;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Database.Repos;
-using LamashareApi.Shared.Exceptions.UserspaceException;
 using Microsoft.EntityFrameworkCore;
-using Zitadel.User.V1;
 
-namespace Lamashare.BusinessLogic.Services.Main.Users;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.Users;
 
 public class UsersService(IRepoWrapper repoWrap, IMapper mapper) : IUsersService
 {

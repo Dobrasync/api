@@ -1,6 +1,6 @@
-using LamashareApi.Database.DB.Entities;
+using Dobrasync.Api.Database.DB.Entities;
 
-namespace Lamashare.BusinessLogic.Services.Core.Invoker;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.Invoker;
 
 public interface IInvokerService
 {

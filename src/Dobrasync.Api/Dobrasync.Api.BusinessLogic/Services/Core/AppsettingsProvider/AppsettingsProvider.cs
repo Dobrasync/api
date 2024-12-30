@@ -1,7 +1,7 @@
-using LamashareApi.Shared.Appsettings;
+using Dobrasync.Api.Shared.Appsettings;
 using Microsoft.Extensions.Options;
 
-namespace Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
 
 public class AppsettingsProvider(IOptions<Appsettings> appsettingsOptions) : IAppsettingsProvider
 {

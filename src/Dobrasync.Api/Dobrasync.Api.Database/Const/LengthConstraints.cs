@@ -1,4 +1,4 @@
-namespace LamashareApi.Database.Const;
+namespace Dobrasync.Api.Database.Const;
 
 public static class LengthConstraints
 {

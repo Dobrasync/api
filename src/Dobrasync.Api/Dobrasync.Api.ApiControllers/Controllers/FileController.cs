@@ -1,11 +1,11 @@
-using Lamashare.BusinessLogic.Dtos.File;
-using Lamashare.BusinessLogic.Dtos.Generic;
-using Lamashare.BusinessLogic.Services.Main.File;
-using LamashareApi.Controllers.Base;
+using Dobrasync.Api.ApiControllers.Controllers.Base;
+using Dobrasync.Api.BusinessLogic.Dtos.File;
+using Dobrasync.Api.BusinessLogic.Dtos.Generic;
+using Dobrasync.Api.BusinessLogic.Services.Main.File;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace LamashareApi.Controllers;
+namespace Dobrasync.Api.ApiControllers.Controllers;
 
 public class FileController(IFileService fileService) : BaseController
 {

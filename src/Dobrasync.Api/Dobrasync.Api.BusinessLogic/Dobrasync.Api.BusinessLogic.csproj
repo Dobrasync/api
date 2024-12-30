@@ -4,15 +4,13 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Lamashare.BusinessLogic</RootNamespace>
+        <RootNamespace>Dobrasync.Api.BusinessLogic</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
-        <ProjectReference Include="..\..\..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
-        <ProjectReference Include="..\Dobrasync.Api.Database\Dobrasync.Api.Database.csproj" />
-        <ProjectReference Include="..\Dobrasync.Api.Shared\Dobrasync.Api.Shared.csproj" />
-        <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Common\Dobrasync.Core.Common.csproj" />
+      <ProjectReference Include="..\Dobrasync.Api.Database\Dobrasync.Api.Database.csproj" />
+      <ProjectReference Include="..\Dobrasync.Api.Shared\Dobrasync.Api.Shared.csproj" />
+      <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Common\Dobrasync.Core.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

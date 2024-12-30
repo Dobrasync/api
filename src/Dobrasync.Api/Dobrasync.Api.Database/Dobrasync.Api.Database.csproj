@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>LamashareApi.Database</RootNamespace>
+        <RootNamespace>Dobrasync.Api.Database</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

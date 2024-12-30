@@ -1,6 +1,6 @@
-using LamashareApi.Shared.Localization;
+using Dobrasync.Api.Shared.Localization;
 
-namespace LamashareApi.Shared.Exceptions.UserspaceException.Validation;
+namespace Dobrasync.Api.Shared.Exceptions.UserspaceException.Validation;
 
 /// <summary>
 ///     Basically your generic bad request response.

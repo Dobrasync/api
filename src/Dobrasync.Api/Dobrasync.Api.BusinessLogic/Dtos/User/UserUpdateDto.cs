@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Dtos.User;
+namespace Dobrasync.Api.BusinessLogic.Dtos.User;
 
 public class UserUpdateDto
 {

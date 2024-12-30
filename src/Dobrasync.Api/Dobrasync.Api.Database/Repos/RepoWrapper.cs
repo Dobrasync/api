@@ -1,10 +1,10 @@
-using LamashareApi.Database.DB;
-using LamashareApi.Database.DB.Entities;
+using Dobrasync.Api.Database.DB;
+using Dobrasync.Api.Database.DB.Entities;
 using Microsoft.AspNetCore.Http;
 
-namespace LamashareApi.Database.Repos;
+namespace Dobrasync.Api.Database.Repos;
 
-public class RepoWrapper(LamashareContext context, IHttpContextAccessor hca) : IRepoWrapper
+public class RepoWrapper(DobrasyncContext context, IHttpContextAccessor hca) : IRepoWrapper
 {
     private IRepo<BlockEntity> _blockRepo = null!;
     private IRepo<FileEntity> _fileRepo = null!;
@@ -13,7 +13,7 @@ public class RepoWrapper(LamashareContext context, IHttpContextAccessor hca) : I
     private IRepo<SystemSettingEntity> _systemSettingRepo = null!;
     private IRepo<UserEntity> _userRepo = null!;
 
-    public LamashareContext DbContext => context;
+    public DobrasyncContext DbContext => context;
 
     #region Repos
 

@@ -1,13 +1,12 @@
-using Lamashare.BusinessLogic.Dtos.Auth;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Services.Main.Auth;
-using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Tests.Fixtures;
+using Dobrasync.Api.BusinessLogic.Dtos.Auth;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Services.Main.Auth;
+using Dobrasync.Api.BusinessLogic.Services.Main.File;
+using Dobrasync.Api.BusinessLogic.Services.Main.Library;
+using Dobrasync.Api.Tests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LamashareApi.Tests.Tests;
+namespace Dobrasync.Api.Tests.Tests;
 
 /// <summary>
 /// Simulate normal user behaviour, multiple actions at once, etc. 

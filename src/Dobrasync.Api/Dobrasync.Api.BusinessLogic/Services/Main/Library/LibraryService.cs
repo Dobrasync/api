@@ -1,20 +1,19 @@
 using AutoMapper;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Mapper.Gridify;
+using Dobrasync.Api.BusinessLogic.Services.Core.AccessControl;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Api.BusinessLogic.Services.Core.Invoker;
+using Dobrasync.Api.BusinessLogic.Services.Core.Localization;
+using Dobrasync.Api.Database.DB.Entities;
+using Dobrasync.Api.Database.Repos;
+using Dobrasync.Api.Shared.Constants;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException;
 using Gridify;
 using Gridify.EntityFramework;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Mapper.Gridify;
-using Lamashare.BusinessLogic.Services.Core.AccessControl;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using Lamashare.BusinessLogic.Services.Core.Invoker;
-using Lamashare.BusinessLogic.Services.Core.Localization;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Database.Repos;
-using LamashareApi.Shared.Constants;
-using LamashareApi.Shared.Exceptions.UserspaceException;
-using LamashareApi.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lamashare.BusinessLogic.Services.Main.Library;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.Library;
 
 public class LibraryService(
     IInvokerService invokerService,

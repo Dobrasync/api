@@ -1,10 +1,9 @@
-using Lamashare.BusinessLogic.Services.Core.Invoker;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Database.Repos;
-using LamashareApi.Shared.Extensions;
+using Dobrasync.Api.BusinessLogic.Services.Core.Invoker;
+using Dobrasync.Api.Database.DB.Entities;
+using Dobrasync.Api.Database.Repos;
 using Microsoft.EntityFrameworkCore;
 
-namespace Lamashare.BusinessLogic.Services.Core.AccessControl;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.AccessControl;
 
 public class AccessControlService(IInvokerService invokerService, IRepoWrapper repoWrap) : IAccessControlService
 {

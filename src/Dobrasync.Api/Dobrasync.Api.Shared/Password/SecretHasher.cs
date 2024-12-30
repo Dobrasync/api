@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace LamashareApi.Shared.Password;
+namespace Dobrasync.Api.Shared.Password;
 
 public static class SecretHasher
 {

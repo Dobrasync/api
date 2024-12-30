@@ -2,7 +2,7 @@ using AutoMapper;
 using Gridify;
 using Gridify.EntityFramework;
 
-namespace Lamashare.BusinessLogic.Util;
+namespace Dobrasync.Api.BusinessLogic.Util;
 
 public static class PaginationExtensions
 {

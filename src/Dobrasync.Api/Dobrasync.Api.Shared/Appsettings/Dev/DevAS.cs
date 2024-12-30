@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Appsettings.Dev;
+namespace Dobrasync.Api.Shared.Appsettings.Dev;
 
 public class DevAS
 {

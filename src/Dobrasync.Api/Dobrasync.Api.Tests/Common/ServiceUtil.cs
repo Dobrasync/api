@@ -1,19 +1,18 @@
-using Lamashare.BusinessLogic.Mapper.AutoMapper;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using Lamashare.BusinessLogic.Services.Core.Localization;
-using Lamashare.BusinessLogic.Services.Main.Auth;
-using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using Lamashare.BusinessLogic.Services.Main.System;
-using Lamashare.BusinessLogic.Services.Main.SystemSettings;
-using LamashareApi.Database.DB;
-using LamashareApi.Database.Repos;
-using LamashareApi.Tests.Mock;
+using Dobrasync.Api.BusinessLogic.Mapper.AutoMapper;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Api.BusinessLogic.Services.Core.Localization;
+using Dobrasync.Api.BusinessLogic.Services.Core.SystemSettings;
+using Dobrasync.Api.BusinessLogic.Services.Main.Auth;
+using Dobrasync.Api.BusinessLogic.Services.Main.File;
+using Dobrasync.Api.BusinessLogic.Services.Main.Library;
+using Dobrasync.Api.Database.DB;
+using Dobrasync.Api.Database.Repos;
+using Dobrasync.Api.Tests.Mock;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LamashareApi.Tests.Common;
+namespace Dobrasync.Api.Tests.Common;
 
 public static class ServiceUtil
 {
@@ -41,7 +40,7 @@ public static class ServiceUtil
 
         #region DB
 
-        services.AddDbContext<LamashareContext>(opt => { opt.UseInMemoryDatabase($"Test-{Guid.NewGuid()}"); });
+        services.AddDbContext<DobrasyncContext>(opt => { opt.UseInMemoryDatabase($"Test-{Guid.NewGuid()}"); });
 
         #endregion
 

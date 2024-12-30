@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Localization;
+namespace Dobrasync.Api.Shared.Localization;
 
 public static class LocKeys
 {

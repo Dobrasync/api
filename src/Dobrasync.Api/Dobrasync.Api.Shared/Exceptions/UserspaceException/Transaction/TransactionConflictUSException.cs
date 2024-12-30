@@ -1,6 +1,6 @@
-using LamashareApi.Shared.Localization;
+using Dobrasync.Api.Shared.Localization;
 
-namespace LamashareApi.Shared.Exceptions.UserspaceException;
+namespace Dobrasync.Api.Shared.Exceptions.UserspaceException.Transaction;
 
 public class TransactionConflictUSException() : UserspaceException(409,
     LocKeys.ExceptionTransactionConflict.KeyTemplate,

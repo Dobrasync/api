@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace LamashareApi.Shared.Appsettings.Sync.Transactions;
+namespace Dobrasync.Api.Shared.Appsettings.Sync.Transaction;
 
 public class TransactionAS
 {

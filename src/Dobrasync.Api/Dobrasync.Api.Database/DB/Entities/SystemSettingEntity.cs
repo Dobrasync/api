@@ -1,6 +1,6 @@
-using LamashareApi.Database.DB.Entities.Base;
+using Dobrasync.Api.Database.DB.Entities.Base;
 
-namespace LamashareApi.Database.DB.Entities;
+namespace Dobrasync.Api.Database.DB.Entities;
 
 public class SystemSettingEntity : BaseEntity
 {

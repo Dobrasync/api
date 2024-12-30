@@ -1,8 +1,8 @@
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Dtos.User;
 using Gridify;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Dtos.User;
 
-namespace Lamashare.BusinessLogic.Services.Main.Users;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.Users;
 
 public interface IUsersService
 {

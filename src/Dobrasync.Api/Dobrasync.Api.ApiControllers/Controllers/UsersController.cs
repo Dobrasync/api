@@ -1,13 +1,12 @@
+using Dobrasync.Api.ApiControllers.Controllers.Base;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Dtos.User;
+using Dobrasync.Api.BusinessLogic.Services.Main.Users;
 using Gridify;
-using Lamashare.BusinessLogic.Dtos.Auth;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Dtos.User;
-using Lamashare.BusinessLogic.Services.Main.Users;
-using LamashareApi.Controllers.Base;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace LamashareApi.Controllers;
+namespace Dobrasync.Api.ApiControllers.Controllers;
 
 [SwaggerTag("Users")]
 public class UsersController(IUsersService usersService) : BaseController

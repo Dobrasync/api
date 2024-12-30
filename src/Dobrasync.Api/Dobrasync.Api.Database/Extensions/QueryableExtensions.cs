@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
-using LamashareApi.Shared.Exceptions.UserspaceException;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException;
 using Microsoft.EntityFrameworkCore;
 
-namespace LamashareApi.Shared.Extensions;
+namespace Dobrasync.Api.Database.Extensions;
 
 public static class QueryableExtensions
 {

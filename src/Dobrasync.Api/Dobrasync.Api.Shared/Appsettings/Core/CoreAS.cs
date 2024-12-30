@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace LamashareApi.Shared.Appsettings.System;
+namespace Dobrasync.Api.Shared.Appsettings.Core;
 
 public class CoreAS
 {

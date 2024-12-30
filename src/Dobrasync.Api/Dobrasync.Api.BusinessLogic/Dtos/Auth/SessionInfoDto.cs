@@ -1,6 +1,6 @@
-using Lamashare.BusinessLogic.Dtos.User;
+using Dobrasync.Api.BusinessLogic.Dtos.User;
 
-namespace Lamashare.BusinessLogic.Dtos.Auth;
+namespace Dobrasync.Api.BusinessLogic.Dtos.Auth;
 
 public class SessionInfoDto
 {

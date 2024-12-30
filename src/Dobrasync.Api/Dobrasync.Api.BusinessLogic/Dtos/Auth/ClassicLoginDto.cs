@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Dtos.Auth;
+namespace Dobrasync.Api.BusinessLogic.Dtos.Auth;
 
 public class ClassicLoginDto
 {

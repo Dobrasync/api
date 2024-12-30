@@ -1,6 +1,6 @@
-using Lamashare.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
 
-namespace Lamashare.BusinessLogic.Services.Main.Library;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.Library;
 
 public interface ILibraryService
 {

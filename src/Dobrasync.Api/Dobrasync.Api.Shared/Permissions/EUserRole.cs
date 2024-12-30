@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Permissions;
+namespace Dobrasync.Api.Shared.Permissions;
 
 public enum EUserRole
 {

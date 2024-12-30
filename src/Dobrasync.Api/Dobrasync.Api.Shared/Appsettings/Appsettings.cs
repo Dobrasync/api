@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using LamashareApi.Shared.Appsettings.Auth;
-using LamashareApi.Shared.Appsettings.Dev;
-using LamashareApi.Shared.Appsettings.Storage;
-using LamashareApi.Shared.Appsettings.Sync;
-using LamashareApi.Shared.Appsettings.System;
+using Dobrasync.Api.Shared.Appsettings.Auth;
+using Dobrasync.Api.Shared.Appsettings.Core;
+using Dobrasync.Api.Shared.Appsettings.Dev;
+using Dobrasync.Api.Shared.Appsettings.Storage;
+using Dobrasync.Api.Shared.Appsettings.Sync;
 
-namespace LamashareApi.Shared.Appsettings;
+namespace Dobrasync.Api.Shared.Appsettings;
 
 public class Appsettings
 {

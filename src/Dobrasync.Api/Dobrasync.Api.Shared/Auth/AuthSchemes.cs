@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Auth;
+namespace Dobrasync.Api.Shared.Auth;
 
 public static class AuthSchemes
 {

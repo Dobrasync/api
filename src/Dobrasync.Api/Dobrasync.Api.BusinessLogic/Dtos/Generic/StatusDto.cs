@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Dtos.Generic;
+namespace Dobrasync.Api.BusinessLogic.Dtos.Generic;
 
 /// <summary>
 ///     Used for very simplistic confirmation

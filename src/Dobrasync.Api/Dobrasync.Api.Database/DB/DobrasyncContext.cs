@@ -1,11 +1,11 @@
-using LamashareApi.Database.DB.Entities;
+using Dobrasync.Api.Database.DB.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LamashareApi.Database.DB;
+namespace Dobrasync.Api.Database.DB;
 
-public class LamashareContext : DbContext
+public class DobrasyncContext : DbContext
 {
-    public LamashareContext(DbContextOptions<LamashareContext> options) : base(options)
+    public DobrasyncContext(DbContextOptions<DobrasyncContext> options) : base(options)
     {
     }
 

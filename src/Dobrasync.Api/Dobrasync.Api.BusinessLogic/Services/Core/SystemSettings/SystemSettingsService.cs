@@ -1,7 +1,6 @@
-using Lamashare.BusinessLogic.Services.Main.System;
-using LamashareApi.Database.Repos;
+using Dobrasync.Api.Database.Repos;
 
-namespace Lamashare.BusinessLogic.Services.Main.SystemSettings;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.SystemSettings;
 
 public class SystemSettingsService(IRepoWrapper repoWrap) : ISystemSettingsService
 {

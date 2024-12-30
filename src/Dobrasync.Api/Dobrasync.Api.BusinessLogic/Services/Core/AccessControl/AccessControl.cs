@@ -1,9 +1,6 @@
-using Lamashare.BusinessLogic.Services.Core.Invoker;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Database.DB.Entities.Base;
-using Microsoft.Extensions.Options;
+using Dobrasync.Api.Database.DB.Entities;
 
-namespace Lamashare.BusinessLogic.Services.Core.AccessControl;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.AccessControl;
 
 public class AccessControl
 {

@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Dtos.File;
+namespace Dobrasync.Api.Database.Enums;
 
 public enum EFileTransactionType
 {

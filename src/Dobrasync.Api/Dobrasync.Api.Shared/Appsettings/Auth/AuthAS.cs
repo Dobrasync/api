@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Dobrasync.Api.Shared.Appsettings.Auth.Idp;
 
-namespace LamashareApi.Shared.Appsettings.Auth;
+namespace Dobrasync.Api.Shared.Appsettings.Auth;
 
 public class AuthAS
 {

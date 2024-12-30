@@ -7,7 +7,7 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <RootNamespace>LamashareApi.Tests</RootNamespace>
+        <RootNamespace>Dobrasync.Api.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,9 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Main\Dobrasync.Core.Main.csproj" />
-        <ProjectReference Include="..\Dobrasync.Api.BusinessLogic\Dobrasync.Api.BusinessLogic.csproj" />
-        <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Common\Dobrasync.Core.Common.csproj" />
+      <ProjectReference Include="..\Dobrasync.Api.BusinessLogic\Dobrasync.Api.BusinessLogic.csproj" />
+      <ProjectReference Include="..\Dobrasync.Api.Shared\Dobrasync.Api.Shared.csproj" />
+      <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Common\Dobrasync.Core.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

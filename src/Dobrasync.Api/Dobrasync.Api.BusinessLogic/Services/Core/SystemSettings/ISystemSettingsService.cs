@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Services.Main.System;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.SystemSettings;
 
 public interface ISystemSettingsService
 {

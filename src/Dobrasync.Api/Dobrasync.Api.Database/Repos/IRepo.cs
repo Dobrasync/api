@@ -1,4 +1,4 @@
-namespace LamashareApi.Database.Repos;
+namespace Dobrasync.Api.Database.Repos;
 
 public interface IRepo<TEntity>
 {

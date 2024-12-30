@@ -1,8 +1,9 @@
-using Lamashare.BusinessLogic.Dtos.ErrorDto;
-using Lamashare.BusinessLogic.Services.Core;
-using LamashareApi.Shared.Exceptions.UserspaceException;
+using Dobrasync.Api.BusinessLogic.Services.Core.Logging;
+using Dobrasync.Api.Shared.Exceptions.UserspaceException;
+using Dobrasync.Api.Shared.Extensions;
+using Dobrasync.Core.Common.Models;
 
-namespace LamashareApi.Middleware.ExceptionInteceptor;
+namespace Dobrasync.Api.ApiControllers.Middleware.ExceptionInteceptor;
 
 public class ExceptionInterceptor(RequestDelegate next)
 {
@@ -21,15 +22,19 @@ public class ExceptionInterceptor(RequestDelegate next)
 
     public async Task WriteResponse(Exception ex, HttpContext context, ILoggingService logger)
     {
-        ErrorDto? errorDto = null;
+        ApiErrorDto? errorDto = null;
         if (ex is UserspaceException userspaceException)
         {
-            errorDto = ErrorDto.CreateFromUserspaceException(userspaceException);
+            errorDto = userspaceException.GetApiErrorDto();
             logger.LogDebug($"Userspace error during request: {ex.StackTrace}");
         }
         else
         {
-            errorDto = ErrorDto.CreateGenericInternalServerError();
+            errorDto = new()
+            {
+                HttpStatusCode = 500,
+                Message = "Internal server error",
+            };
             logger.LogError($"Internal error during request: {ex.StackTrace}");
         }
 

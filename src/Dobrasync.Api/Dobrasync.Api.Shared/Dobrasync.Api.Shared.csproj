@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>LamashareApi.Shared</RootNamespace>
+        <RootNamespace>Dobrasync.Api.Shared</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -29,6 +29,10 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>SharedResources.en-US.resx</DependentUpon>
         </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\submodules\core\src\Dobrasync.Core\Dobrasync.Core.Common\Dobrasync.Core.Common.csproj" />
     </ItemGroup>
 
 </Project>

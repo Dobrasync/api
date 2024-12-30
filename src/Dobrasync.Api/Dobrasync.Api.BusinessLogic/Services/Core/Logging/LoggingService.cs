@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Services.Core;
+namespace Dobrasync.Api.BusinessLogic.Services.Core.Logging;
 
 public class LoggingService : ILoggingService
 {

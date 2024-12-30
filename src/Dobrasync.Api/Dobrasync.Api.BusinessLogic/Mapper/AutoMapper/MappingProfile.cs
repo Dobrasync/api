@@ -1,9 +1,9 @@
 using AutoMapper;
-using Lamashare.BusinessLogic.Dtos.Library;
-using Lamashare.BusinessLogic.Dtos.User;
-using LamashareApi.Database.DB.Entities;
+using Dobrasync.Api.BusinessLogic.Dtos.Library;
+using Dobrasync.Api.BusinessLogic.Dtos.User;
+using Dobrasync.Api.Database.DB.Entities;
 
-namespace Lamashare.BusinessLogic.Mapper.AutoMapper;
+namespace Dobrasync.Api.BusinessLogic.Mapper.AutoMapper;
 
 public class MappingProfile : Profile
 {

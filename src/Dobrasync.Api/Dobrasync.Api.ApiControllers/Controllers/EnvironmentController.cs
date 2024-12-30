@@ -1,10 +1,10 @@
-using Lamashare.BusinessLogic.Dtos.Auth;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using LamashareApi.Controllers.Base;
+using Dobrasync.Api.ApiControllers.Controllers.Base;
+using Dobrasync.Api.BusinessLogic.Dtos.Auth;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace LamashareApi.Controllers;
+namespace Dobrasync.Api.ApiControllers.Controllers;
 
 [SwaggerTag("Environment")]
 public class EnvironmentController(IAppsettingsProvider apps) : BaseController
@@ -17,7 +17,7 @@ public class EnvironmentController(IAppsettingsProvider apps) : BaseController
         OperationId = nameof(GetIdpAuthority)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(Sdto))]
-    public async Task<IActionResult> GetIdpAuthority()
+    public IActionResult GetIdpAuthority()
     {
         return Ok(new Sdto
         {
@@ -35,7 +35,7 @@ public class EnvironmentController(IAppsettingsProvider apps) : BaseController
         OperationId = nameof(GetIdpDeviceClientId)
     )]
     [SwaggerResponse(StatusCodes.Status200OK, nameof(Ok), typeof(Sdto))]
-    public async Task<IActionResult> GetIdpDeviceClientId()
+    public IActionResult GetIdpDeviceClientId()
     {
         return Ok(new Sdto
         {

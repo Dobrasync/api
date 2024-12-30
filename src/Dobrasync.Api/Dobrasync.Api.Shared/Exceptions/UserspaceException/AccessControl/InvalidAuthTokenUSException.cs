@@ -1,4 +1,4 @@
-namespace LamashareApi.Shared.Exceptions.UserspaceException;
+namespace Dobrasync.Api.Shared.Exceptions.UserspaceException.AccessControl;
 
 public class InvalidAuthTokenUSException : UserspaceException
 {

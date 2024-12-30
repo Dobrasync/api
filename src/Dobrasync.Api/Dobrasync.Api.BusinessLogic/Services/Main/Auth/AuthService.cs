@@ -1,12 +1,12 @@
 using AutoMapper;
-using Lamashare.BusinessLogic.Dtos.Auth;
-using Lamashare.BusinessLogic.Dtos.User;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using Lamashare.BusinessLogic.Services.Core.Invoker;
-using LamashareApi.Database.DB.Entities;
-using LamashareApi.Database.Repos;
+using Dobrasync.Api.BusinessLogic.Dtos.Auth;
+using Dobrasync.Api.BusinessLogic.Dtos.User;
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Api.BusinessLogic.Services.Core.Invoker;
+using Dobrasync.Api.Database.DB.Entities;
+using Dobrasync.Api.Database.Repos;
 
-namespace Lamashare.BusinessLogic.Services.Main.Auth;
+namespace Dobrasync.Api.BusinessLogic.Services.Main.Auth;
 
 public class AuthService(IRepoWrapper repoWrap, IMapper mapper, IAppsettingsProvider apps, IInvokerService invokerService) : IAuthService
 {

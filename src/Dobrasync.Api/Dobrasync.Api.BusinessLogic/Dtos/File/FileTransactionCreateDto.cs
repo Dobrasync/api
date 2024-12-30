@@ -1,6 +1,7 @@
-using Lamashare.BusinessLogic.Decorators;
+using Dobrasync.Api.BusinessLogic.Decorators;
+using Dobrasync.Api.Database.Enums;
 
-namespace Lamashare.BusinessLogic.Dtos.File;
+namespace Dobrasync.Api.BusinessLogic.Dtos.File;
 
 public class FileTransactionCreateDto
 {

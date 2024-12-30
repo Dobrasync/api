@@ -1,7 +1,7 @@
+using Dobrasync.Api.Database.DB.Entities;
 using Gridify;
-using LamashareApi.Database.DB.Entities;
 
-namespace Lamashare.BusinessLogic.Mapper.Gridify;
+namespace Dobrasync.Api.BusinessLogic.Mapper.Gridify;
 
 public class LibraryGridifyMapper : GridifyMapper<LibraryEntity>
 {

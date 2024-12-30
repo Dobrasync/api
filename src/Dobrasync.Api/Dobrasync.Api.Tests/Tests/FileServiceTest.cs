@@ -1,11 +1,12 @@
+using Dobrasync.Api.BusinessLogic.Dtos.File;
+using Dobrasync.Api.BusinessLogic.Services.Main.File;
+using Dobrasync.Api.BusinessLogic.Services.Main.Library;
+using Dobrasync.Api.Database.Enums;
+using Dobrasync.Api.Tests.Fixtures;
 using Dobrasync.Core.Common.Util;
-using Lamashare.BusinessLogic.Dtos.File;
-using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using LamashareApi.Tests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LamashareApi.Tests.Tests;
+namespace Dobrasync.Api.Tests.Tests;
 
 [Collection("Sync")]
 public class FileServiceTest : IClassFixture<GenericTestFixture>

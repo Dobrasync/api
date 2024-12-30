@@ -1,4 +1,4 @@
-namespace Lamashare.BusinessLogic.Dtos.Library;
+namespace Dobrasync.Api.BusinessLogic.Dtos.Library;
 
 public class LibraryUpdateDto
 {

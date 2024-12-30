@@ -1,6 +1,6 @@
-using LamashareApi.Shared.Localization;
+using Dobrasync.Api.Shared.Localization;
 
-namespace LamashareApi.Shared.Exceptions.UserspaceException;
+namespace Dobrasync.Api.Shared.Exceptions.UserspaceException.Transaction;
 
 public class TransactionAlreadyCompleteUSException() : UserspaceException(400,
     LocKeys.ExceptionTransactionAlreadyComplete.KeyTemplate, "The transaction has already been completed.");

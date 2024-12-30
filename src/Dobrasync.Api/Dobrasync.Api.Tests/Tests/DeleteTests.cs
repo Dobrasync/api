@@ -1,13 +1,13 @@
+using Dobrasync.Api.BusinessLogic.Services.Core.AppsettingsProvider;
+using Dobrasync.Api.BusinessLogic.Services.Main.File;
+using Dobrasync.Api.BusinessLogic.Services.Main.Library;
+using Dobrasync.Api.Database.Repos;
+using Dobrasync.Api.Shared.Constants;
+using Dobrasync.Api.Tests.Fixtures;
 using Dobrasync.Core.Common.Util;
-using Lamashare.BusinessLogic.Services.Core.AppsettingsProvider;
-using Lamashare.BusinessLogic.Services.Main.File;
-using Lamashare.BusinessLogic.Services.Main.Library;
-using LamashareApi.Database.Repos;
-using LamashareApi.Shared.Constants;
-using LamashareApi.Tests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LamashareApi.Tests.Tests;
+namespace Dobrasync.Api.Tests.Tests;
 
 [Collection("Sync")]
 public class DeleteTests : IClassFixture<GenericTestFixture>
